@@ -54,7 +54,7 @@ bool SetIconSurface(SDL_Window* win, CBitmap* bmp) {
 
 	if (bmp == nullptr) {
 		// only reached on exit
-		SDL_FreeSurface(windowIcon.surf);
+		SDL_DestroySurface(windowIcon.surf);
 		SDL_SetWindowIcon(win, windowIcon.surf = nullptr);
 
 		*(windowIcon.bmp) = {};
@@ -72,7 +72,7 @@ bool SetIconSurface(SDL_Window* win, CBitmap* bmp) {
 
 	static auto SetWindowIconImpl = [](SDL_Window* win, SDL_Surface* surf) {
 		SDL_SetWindowIcon(win, surf);
-		SDL_FreeSurface(windowIcon.surf);
+		SDL_DestroySurface(windowIcon.surf);
 		windowIcon.surf = surf;
 	};
 

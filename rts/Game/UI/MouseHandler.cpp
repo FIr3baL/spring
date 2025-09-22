@@ -259,7 +259,7 @@ void CMouseHandler::MouseMove(int x, int y, int dx, int dy)
 	// switching to MMB-mode while user is moving mouse can generate
 	// a spurious event in the opposite direction (if cursor happens
 	// to pass the center pixel) which would cause a camera position
-	// jump, so always ignore one SDL_MOUSEMOTION after entering it
+	// jump, so always ignore one SDL_EVENT_MOUSE_MOTION after entering it
 	dx *= (1 - ignoreMove);
 	dy *= (1 - ignoreMove);
 
@@ -536,7 +536,7 @@ void CMouseHandler::MouseRelease(int x, int y, int button)
 	if ((button == SDL_BUTTON_LEFT) && !buttons[button].chorded) {
 		ButtonPressEvt& bp = buttons[SDL_BUTTON_LEFT];
 
-		if (!KeyInput::GetKeyModState(KMOD_SHIFT) && !KeyInput::GetKeyModState(KMOD_CTRL) && selectedUnitsHandler.GetBoxSelectionHandledByEngine())
+		if (!KeyInput::GetKeyModState(SDL_KMOD_SHIFT) && !KeyInput::GetKeyModState(SDL_KMOD_CTRL) && selectedUnitsHandler.GetBoxSelectionHandledByEngine())
 			selectedUnitsHandler.ClearSelected();
 
 		if (bp.movement > dragSelectionThreshold && selectedUnitsHandler.GetBoxSelectionHandledByEngine()) {
@@ -778,7 +778,7 @@ void CMouseHandler::ShowMouse()
 
 	hideCursor = false;
 
-	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_SetRelativeMouseMode(false);
 
 	// don't use SDL_ShowCursor here since it would cause flickering with hwCursor
 	// (by switching between default cursor and later the real one, e.g. `attack`)
@@ -802,7 +802,7 @@ void CMouseHandler::HideMouse()
 	// this way the mouse position will never change so it is also unnecessary to call
 	// SDL_WarpMouseInWindow and handle the associated wart of filtering motion events
 	// technically supersedes SDL_ShowCursor as well
-	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_SetRelativeMouseMode(true);
 
 	const int2 viewMouseCenter = GetViewMouseCenter();
 

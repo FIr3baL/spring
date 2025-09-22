@@ -363,7 +363,7 @@ void SelectMenu::DirectConnect(const std::string& addr)
 bool SelectMenu::HandleEventSelf(const SDL_Event& ev)
 {
 	switch (ev.type) {
-		case SDL_KEYDOWN: {
+		case SDL_EVENT_KEY_DOWN: {
 			if (ev.key.keysym.sym == SDLK_ESCAPE) {
 				LOG("[SelectMenu] user exited");
 				Quit();

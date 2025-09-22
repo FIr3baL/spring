@@ -80,9 +80,9 @@ void CKeyCodes::Reset()
 		AddPair(std::string(1, i), i, true);
 	}
 
-	AddPair("~", SDLK_BACKQUOTE, true);
-	AddPair("tilde", SDLK_BACKQUOTE, true);
-	AddPair("backquote", SDLK_BACKQUOTE, true);
+	AddPair("~", SDLK_GRAVE, true);
+	AddPair("tilde", SDLK_GRAVE, true);
+	AddPair("backquote", SDLK_GRAVE, true);
 	AddPair("caret", SDLK_CARET, true);
 
 	AddPair("§", 0xA7, true);

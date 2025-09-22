@@ -296,7 +296,7 @@ void List::DrawSelf()
 bool List::HandleEventSelf(const SDL_Event& ev)
 {
 	switch (ev.type) {
-		case SDL_MOUSEBUTTONDOWN: {
+		case SDL_EVENT_MOUSE_BUTTON_DOWN: {
 			hasFocus = gui->MouseOverElement(GetRoot(), ev.button.x, ev.button.y);
 			if(MouseOver(ev.button.x, ev.button.y)) {
 				if(hasFocus) {
@@ -306,7 +306,7 @@ bool List::HandleEventSelf(const SDL_Event& ev)
 			}
 			break;
 		}
-		case SDL_MOUSEBUTTONUP: {
+		case SDL_EVENT_MOUSE_BUTTON_UP: {
 			if (!hasFocus)
 				break;
 			if (MouseOver(ev.button.x, ev.button.y) || activeScrollbar)
@@ -316,7 +316,7 @@ bool List::HandleEventSelf(const SDL_Event& ev)
 			}
 			break;
 		}
-		case SDL_MOUSEWHEEL: {
+		case SDL_EVENT_MOUSE_WHEEL: {
 			int mousex, mousey;
 			SDL_GetMouseState(&mousex, &mousey);
 			if(hasFocus && MouseOver(mousex, mousey)) {
@@ -328,7 +328,7 @@ bool List::HandleEventSelf(const SDL_Event& ev)
 				return true;
 			}
 		} break;
-		case SDL_MOUSEMOTION: {
+		case SDL_EVENT_MOUSE_MOTION: {
 			if (!hasFocus)
 				break;
 			if (MouseOver(ev.motion.x, ev.motion.y) || activeScrollbar)
@@ -338,7 +338,7 @@ bool List::HandleEventSelf(const SDL_Event& ev)
 			}
 			break;
 		}
-		case SDL_KEYDOWN: {
+		case SDL_EVENT_KEY_DOWN: {
 			if (!hasFocus)
 				break;
 			if(ev.key.keysym.sym == SDLK_ESCAPE)

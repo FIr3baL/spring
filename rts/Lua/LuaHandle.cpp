@@ -3140,10 +3140,10 @@ bool CLuaHandle::KeyPress(int keyCode, int scanCode, bool isRepeat)
 	lua_pushinteger(L, SDL21_keysyms(keyCode));
 
 	lua_createtable(L, 0, 4);
-	HSTR_PUSH_BOOL(L, "alt",   !!KeyInput::GetKeyModState(KMOD_ALT));
-	HSTR_PUSH_BOOL(L, "ctrl",  !!KeyInput::GetKeyModState(KMOD_CTRL));
-	HSTR_PUSH_BOOL(L, "meta",  !!KeyInput::GetKeyModState(KMOD_GUI));
-	HSTR_PUSH_BOOL(L, "shift", !!KeyInput::GetKeyModState(KMOD_SHIFT));
+	HSTR_PUSH_BOOL(L, "alt",   !!KeyInput::GetKeyModState(SDL_KMOD_ALT));
+	HSTR_PUSH_BOOL(L, "ctrl",  !!KeyInput::GetKeyModState(SDL_KMOD_CTRL));
+	HSTR_PUSH_BOOL(L, "meta",  !!KeyInput::GetKeyModState(SDL_KMOD_GUI));
+	HSTR_PUSH_BOOL(L, "shift", !!KeyInput::GetKeyModState(SDL_KMOD_SHIFT));
 
 	lua_pushboolean(L, isRepeat);
 
@@ -3203,10 +3203,10 @@ bool CLuaHandle::KeyRelease(int keyCode, int scanCode)
 	lua_pushinteger(L, SDL21_keysyms(keyCode));
 
 	lua_createtable(L, 0, 4);
-	HSTR_PUSH_BOOL(L, "alt",   !!KeyInput::GetKeyModState(KMOD_ALT));
-	HSTR_PUSH_BOOL(L, "ctrl",  !!KeyInput::GetKeyModState(KMOD_CTRL));
-	HSTR_PUSH_BOOL(L, "meta",  !!KeyInput::GetKeyModState(KMOD_GUI));
-	HSTR_PUSH_BOOL(L, "shift", !!KeyInput::GetKeyModState(KMOD_SHIFT));
+	HSTR_PUSH_BOOL(L, "alt",   !!KeyInput::GetKeyModState(SDL_KMOD_ALT));
+	HSTR_PUSH_BOOL(L, "ctrl",  !!KeyInput::GetKeyModState(SDL_KMOD_CTRL));
+	HSTR_PUSH_BOOL(L, "meta",  !!KeyInput::GetKeyModState(SDL_KMOD_GUI));
+	HSTR_PUSH_BOOL(L, "shift", !!KeyInput::GetKeyModState(SDL_KMOD_SHIFT));
 
 	CKeySet ks(keyCode);
 	lua_pushsstring(L, ks.GetString(true));

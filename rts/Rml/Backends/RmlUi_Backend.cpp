@@ -540,17 +540,17 @@ bool RmlGui::ProcessTextInput(const std::string& text)
 bool processContextEvent(Rml::Context* context, const SDL_Event& event)
 {
 	switch (event.type) {
-		case SDL_MOUSEMOTION:
-		case SDL_MOUSEBUTTONDOWN:
-		case SDL_MOUSEBUTTONUP:
-		case SDL_MOUSEWHEEL:
-		case SDL_KEYDOWN:
-		case SDL_KEYUP:
-		case SDL_TEXTINPUT:
+		case SDL_EVENT_MOUSE_MOTION:
+		case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		case SDL_EVENT_MOUSE_BUTTON_UP:
+		case SDL_EVENT_MOUSE_WHEEL:
+		case SDL_EVENT_KEY_DOWN:
+		case SDL_EVENT_KEY_UP:
+		case SDL_EVENT_TEXT_INPUT:
 			return true;  // handled elsewhere
 
 		case SDL_WINDOWEVENT: {
-			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			if (event.window.event == SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED) {
 				auto x = event.window.data1;
 				auto y = event.window.data2;
 

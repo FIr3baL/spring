@@ -50,9 +50,9 @@ void MacMessageBox(const char *msg, const char *caption, unsigned int flags){
 /* Invoked from the Quit menu item */
 - (void)terminate:(id)sender
 {
-    /* Post a SDL_QUIT event */
+    /* Post a SDL_EVENT_QUIT event */
     SDL_Event event;
-    event.type = SDL_QUIT;
+    event.type = SDL_EVENT_QUIT;
     SDL_PushEvent(&event);
 }
 @end

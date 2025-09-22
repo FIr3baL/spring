@@ -1062,8 +1062,8 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 	switch (event.type) {
 		case SDL_WINDOWEVENT: {
 			switch (event.window.event) {
-				case SDL_WINDOWEVENT_MOVED: {
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_MOVED][1] di=%d, ssx=%d, ssy=%d, wsx=%d, wsy=%d, wpx=%d, wpy=%d"
+				case SDL_EVENT_WINDOW_MOVED: {
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_MOVED][1] di=%d, ssx=%d, ssy=%d, wsx=%d, wsy=%d, wpx=%d, wpy=%d"
 						, __func__
 						, globalRendering->GetCurrentDisplayIndex()
 						, globalRendering->screenSizeX
@@ -1086,7 +1086,7 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 						}
 					}
 
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_MOVED][2] di=%d, ssx=%d, ssy=%d, wsx=%d, wsy=%d, wpx=%d, wpy=%d"
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_MOVED][2] di=%d, ssx=%d, ssy=%d, wsx=%d, wsy=%d, wpx=%d, wpy=%d"
 						, __func__
 						, globalRendering->GetCurrentDisplayIndex()
 						, globalRendering->screenSizeX
@@ -1096,9 +1096,9 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 						, globalRendering->winPosX
 						, globalRendering->winPosY);
 				} break;
-				// case SDL_WINDOWEVENT_RESIZED: // always preceded by CHANGED
-				case SDL_WINDOWEVENT_SIZE_CHANGED: {
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_SIZE_CHANGED][1] fullScreen=%d", __func__, globalRendering->fullScreen);
+				// case SDL_EVENT_WINDOW_RESIZED: // always preceded by CHANGED
+				case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED][1] fullScreen=%d", __func__, globalRendering->fullScreen);
 
 					Watchdog::ClearTimer(WDT_MAIN, true);
 
@@ -1118,13 +1118,13 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 						mouseInput->InstallWndCallback();
 					}
 
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_SIZE_CHANGED][2]\n", __func__);
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED][2]\n", __func__);
 				} break;
-				case SDL_WINDOWEVENT_MAXIMIZED:
-				case SDL_WINDOWEVENT_RESTORED:
-				case SDL_WINDOWEVENT_SHOWN: {
+				case SDL_EVENT_WINDOW_MAXIMIZED:
+				case SDL_EVENT_WINDOW_RESTORED:
+				case SDL_EVENT_WINDOW_SHOWN: {
 					LOG("%s", "");
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_SHOWN][1] fullScreen=%d", __func__, globalRendering->fullScreen);
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_SHOWN][1] fullScreen=%d", __func__, globalRendering->fullScreen);
 
 					// reactivate sounds and other
 					globalRendering->active = true;
@@ -1139,12 +1139,12 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 						FBO::GLContextReinit();
 					}
 
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_SHOWN][2]\n", __func__);
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_SHOWN][2]\n", __func__);
 				} break;
-				case SDL_WINDOWEVENT_MINIMIZED:
-				case SDL_WINDOWEVENT_HIDDEN: {
+				case SDL_EVENT_WINDOW_MINIMIZED:
+				case SDL_EVENT_WINDOW_HIDDEN: {
 					LOG("%s", "");
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_HIDDEN][1] fullScreen=%d", __func__, globalRendering->fullScreen);
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_HIDDEN][1] fullScreen=%d", __func__, globalRendering->fullScreen);
 
 					// deactivate sounds and other
 					globalRendering->active = false;
@@ -1159,19 +1159,19 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 						FBO::GLContextLost();
 					}
 
-					LOG("[SpringApp::%s][SDL_WINDOWEVENT_HIDDEN][2]\n", __func__);
+					LOG("[SpringApp::%s][SDL_EVENT_WINDOW_HIDDEN][2]\n", __func__);
 				} break;
 
-				case SDL_WINDOWEVENT_FOCUS_GAINED: {
+				case SDL_EVENT_WINDOW_FOCUS_GAINED: {
 					// update keydown table
 					KeyInput::Update(keyBindings.GetFakeMetaKey());
 				} break;
-				case SDL_WINDOWEVENT_FOCUS_LOST: {
+				case SDL_EVENT_WINDOW_FOCUS_LOST: {
 					Watchdog::ClearTimer(WDT_MAIN, true);
 
 					// SDL has some bug and does not update modstate on alt+tab/minimize etc.
 					//FIXME check if still happens with SDL2 (2013)
-					SDL_SetModState((SDL_Keymod)(SDL_GetModState() & (KMOD_NUM | KMOD_CAPS | KMOD_MODE)));
+					SDL_SetModState((SDL_Keymod)(SDL_GetModState() & (SDL_KMOD_NUM | SDL_KMOD_CAPS | SDL_KMOD_MODE)));
 
 					// release all keyboard keys
 					KeyInput::ReleaseAllKeys();
@@ -1183,7 +1183,7 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 								continue;
 
 							SDL_Event event;
-							event.type = event.button.type = SDL_MOUSEBUTTONUP;
+							event.type = event.button.type = SDL_EVENT_MOUSE_BUTTON_UP;
 							event.button.state = SDL_RELEASED;
 							event.button.which = 0;
 							event.button.button = i;
@@ -1201,29 +1201,29 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 					globalRendering->SetWindowInputGrabbing(false);
 				} break;
 
-				case SDL_WINDOWEVENT_CLOSE: {
+				case SDL_EVENT_WINDOW_CLOSE_REQUESTED: {
 					gu->globalQuit = true;
 				} break;
 			};
 		} break;
-		case SDL_AUDIODEVICEREMOVED: {
-			LOG("[SpringApp::%s][SDL_AUDIODEVICEREMOVED][1] type=%u, which=%u, iscapture=%u", __func__, event.adevice.type, event.adevice.which, static_cast<uint32_t>(event.adevice.iscapture));
+		case SDL_EVENT_AUDIO_DEVICE_REMOVED: {
+			LOG("[SpringApp::%s][SDL_EVENT_AUDIO_DEVICE_REMOVED][1] type=%u, which=%u, iscapture=%u", __func__, event.adevice.type, event.adevice.which, static_cast<uint32_t>(event.adevice.iscapture));
 			sound->DeviceChanged(event.adevice.which);
 		} break;
-		case SDL_QUIT: {
+		case SDL_EVENT_QUIT: {
 			gu->globalQuit = true;
 		} break;
-		case SDL_TEXTEDITING: {
+		case SDL_EVENT_TEXT_EDITING: {
 			if (activeController != nullptr)
 				activeController->TextEditing(event.edit.text, event.edit.start, event.edit.length);
 
 		} break;
-		case SDL_TEXTINPUT: {
+		case SDL_EVENT_TEXT_INPUT: {
 			if (activeController != nullptr)
 				activeController->TextInput(event.text.text);
 
 		} break;
-		case SDL_KEYDOWN: {
+		case SDL_EVENT_KEY_DOWN: {
 			KeyInput::Update(keyBindings.GetFakeMetaKey());
 
 			if (activeController != nullptr) {
@@ -1233,7 +1233,7 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 			}
 
 		} break;
-		case SDL_KEYUP: {
+		case SDL_EVENT_KEY_UP: {
 			KeyInput::Update(keyBindings.GetFakeMetaKey());
 
 			if (activeController != nullptr) {
@@ -1243,7 +1243,7 @@ bool SpringApp::MainEventHandler(const SDL_Event& event)
 				activeController->KeyReleased(keyCode, scanCode);
 			}
 		} break;
-		case SDL_KEYMAPCHANGED: {
+		case SDL_EVENT_KEYMAP_CHANGED: {
 			if (activeController != nullptr) {
 				activeController->KeyMapChanged();
 			}

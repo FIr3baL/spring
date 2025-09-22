@@ -80,10 +80,10 @@ bool CGroupHandler::GroupCommand(int num)
 	CGroup* group = GetGroup(num);
 
 	// stable equivalents of "set" and "add" commands
-	if (KeyInput::GetKeyModState(KMOD_CTRL))
+	if (KeyInput::GetKeyModState(SDL_KMOD_CTRL))
 	{
 		// holding shift emulates "add" command
-		if(!KeyInput::GetKeyModState(KMOD_SHIFT))
+		if(!KeyInput::GetKeyModState(SDL_KMOD_SHIFT))
 			group->ClearUnits();
 
 		for (const int unitID: selectedUnitsHandler.selectedUnits) {
@@ -99,7 +99,7 @@ bool CGroupHandler::GroupCommand(int num)
 		}
 	}
 	// stable equivalent of "selectadd" command
-	else if (KeyInput::GetKeyModState(KMOD_SHIFT))
+	else if (KeyInput::GetKeyModState(SDL_KMOD_SHIFT))
 	{
 		// do not select the group, just add its members to the current selection
 		for (const int unitID: group->units) {
@@ -109,7 +109,7 @@ bool CGroupHandler::GroupCommand(int num)
 		return true;
 	}
 	// stable equivalent of "selecttoggle" command
-	else if (KeyInput::GetKeyModState(KMOD_ALT))
+	else if (KeyInput::GetKeyModState(SDL_KMOD_ALT))
 	{
 		// do not select the group, just toggle its members with the current selection
 		const auto& selUnits = selectedUnitsHandler.selectedUnits;

@@ -44,6 +44,7 @@ SCANSYMS = {
     SC_X = 27,
     SC_Y = 28,
     SC_Z = 29,
+
     SC_1 = 30,
     SC_2 = 31,
     SC_3 = 32,
@@ -54,11 +55,13 @@ SCANSYMS = {
     SC_8 = 37,
     SC_9 = 38,
     SC_0 = 39,
+
     SC_RETURN = 40,
     SC_ESCAPE = 41,
     SC_BACKSPACE = 42,
     SC_TAB = 43,
     SC_SPACE = 44,
+
     SC_MINUS = 45,
     SC_EQUALS = 46,
     SC_LEFTBRACKET = 47,
@@ -83,7 +86,7 @@ SCANSYMS = {
                                   *   identically. So, as an implementor, unless
                                   *   your keyboard generates both of those
                                   *   codes and your OS treats them differently,
-                                  *   you should generate BACKSLASH
+                                  *   you should generate SC_BACKSLASH
                                   *   instead of this code. As a user, you
                                   *   should not rely on this code because SDL
                                   *   will never generate it with most (all?)
@@ -111,7 +114,9 @@ SCANSYMS = {
     SC_COMMA = 54,
     SC_PERIOD = 55,
     SC_SLASH = 56,
+
     SC_CAPSLOCK = 57,
+
     SC_F1 = 58,
     SC_F2 = 59,
     SC_F3 = 60,
@@ -124,6 +129,7 @@ SCANSYMS = {
     SC_F10 = 67,
     SC_F11 = 68,
     SC_F12 = 69,
+
     SC_PRINTSCREEN = 70,
     SC_SCROLLLOCK = 71,
     SC_PAUSE = 72,
@@ -138,6 +144,7 @@ SCANSYMS = {
     SC_LEFT = 80,
     SC_DOWN = 81,
     SC_UP = 82,
+
     SC_NUMLOCKCLEAR = 83, --[[< num lock on PC, clear on Mac keyboards
                                      --]]
     SC_KP_DIVIDE = 84,
@@ -156,9 +163,10 @@ SCANSYMS = {
     SC_KP_9 = 97,
     SC_KP_0 = 98,
     SC_KP_PERIOD = 99,
+
     SC_NONUSBACKSLASH = 100, --[[< This is the additional key that ISO
                                         *   keyboards have over ANSI ones,
-                                        *   located between left shift and Y.
+                                        *   located between left shift and Z.
                                         *   Produces GRAVE ACCENT and TILDE in a
                                         *   US or UK Mac layout, REVERSE SOLIDUS
                                         *   (backslash) and VERTICAL LINE in a
@@ -184,25 +192,26 @@ SCANSYMS = {
     SC_F23 = 114,
     SC_F24 = 115,
     SC_EXECUTE = 116,
-    SC_HELP = 117,
-    SC_MENU = 118,
+    SC_HELP = 117,    /**< AL Integrated Help Center */
+    SC_MENU = 118,    /**< Menu (show menu) */
     SC_SELECT = 119,
-    SC_STOP = 120,
-    SC_AGAIN = 121,   --[[< redo --]]
-    SC_UNDO = 122,
-    SC_CUT = 123,
-    SC_COPY = 124,
-    SC_PASTE = 125,
-    SC_FIND = 126,
+    SC_STOP = 120,    /**< AC Stop */
+    SC_AGAIN = 121,   /**< AC Redo/Repeat */
+    SC_UNDO = 122,    /**< AC Undo */
+    SC_CUT = 123,     /**< AC Cut */
+    SC_COPY = 124,    /**< AC Copy */
+    SC_PASTE = 125,   /**< AC Paste */
+    SC_FIND = 126,    /**< AC Find */
     SC_MUTE = 127,
     SC_VOLUMEUP = 128,
     SC_VOLUMEDOWN = 129,
--- not sure whether there's a reason to enable these 
---     LOCKINGCAPSLOCK = 130,  
---     LOCKINGNUMLOCK = 131, 
---     LOCKINGSCROLLLOCK = 132, 
+/* not sure whether there's a reason to enable these */
+/*     SC_LOCKINGCAPSLOCK = 130,   */ 
+/*     SC_LOCKINGNUMLOCK = 131,    */
+/*     SC_LOCKINGSCROLLLOCK = 132, */
     SC_KP_COMMA = 133,
     SC_KP_EQUALSAS400 = 134,
+
     SC_INTERNATIONAL1 = 135, --[[< used on Asian keyboards, see
                                             footnotes in USB doc --]]
     SC_INTERNATIONAL2 = 136,
@@ -222,9 +231,10 @@ SCANSYMS = {
     SC_LANG7 = 150, --[[< reserved --]]
     SC_LANG8 = 151, --[[< reserved --]]
     SC_LANG9 = 152, --[[< reserved --]]
+
     SC_ALTERASE = 153, --[[< Erase-Eaze --]]
     SC_SYSREQ = 154,
-    SC_CANCEL = 155,
+    SC_CANCEL = 155,      /**< AC Cancel */
     SC_CLEAR = 156,
     SC_PRIOR = 157,
     SC_RETURN2 = 158,
@@ -234,6 +244,7 @@ SCANSYMS = {
     SC_CLEARAGAIN = 162,
     SC_CRSEL = 163,
     SC_EXSEL = 164,
+
     SC_KP_00 = 176,
     SC_KP_000 = 177,
     SC_THOUSANDSSEPARATOR = 178,
@@ -280,6 +291,7 @@ SCANSYMS = {
     SC_KP_OCTAL = 219,
     SC_KP_DECIMAL = 220,
     SC_KP_HEXADECIMAL = 221,
+
     SC_LCTRL = 224,
     SC_LSHIFT = 225,
     SC_LALT = 226, --[[< alt, option --]]
@@ -288,63 +300,86 @@ SCANSYMS = {
     SC_RSHIFT = 229,
     SC_RALT = 230, --[[< alt gr, option --]]
     SC_RGUI = 231, --[[< windows, command (apple), meta --]]
+
     SC_MODE = 257,    --[[< I'm not sure if this is really not covered
                                  *   by any of the above, but since there's a
-                                 *   special KMOD_MODE for it I'm adding it here
+                                 *   special SDL_KMOD_MODE for it I'm adding it here
                                  --]]
-    -- @} --]]-- Usage page 0x07 --
-    --[[
+
+    /* @} *//* Usage page 0x07 */
+
+    /**
      *  \name Usage page 0x0C
      *
      *  These values are mapped from usage page 0x0C (USB consumer page).
-     --]]
-    -- @{ --
-    SC_AUDIONEXT = 258,
-    SC_AUDIOPREV = 259,
-    SC_AUDIOSTOP = 260,
-    SC_AUDIOPLAY = 261,
-    SC_AUDIOMUTE = 262,
-    SC_MEDIASELECT = 263,
-    SC_WWW = 264,
-    SC_MAIL = 265,
-    SC_CALCULATOR = 266,
-    SC_COMPUTER = 267,
-    SC_AC_SEARCH = 268,
-    SC_AC_HOME = 269,
-    SC_AC_BACK = 270,
-    SC_AC_FORWARD = 271,
-    SC_AC_STOP = 272,
-    SC_AC_REFRESH = 273,
-    SC_AC_BOOKMARKS = 274,
-    -- @} ---- Usage page 0x0C --
-    --[[
-     *  \name Walther keys
      *
-     *  These are values that Christian Walther added (for mac keyboard?).
-     --]]
-    -- @{ --
-    SC_BRIGHTNESSDOWN = 275,
-    SC_BRIGHTNESSUP = 276,
-    SC_DISPLAYSWITCH = 277, --[[< display mirroring/dual display
-                                           switch, video mode switch --]]
-    SC_KBDILLUMTOGGLE = 278,
-    SC_KBDILLUMDOWN = 279,
-    SC_KBDILLUMUP = 280,
-    SC_EJECT = 281,
-    SC_SLEEP = 282,
-    SC_APP1 = 283,
-    SC_APP2 = 284,
-    -- @} -- -- Walther keys --
-    --[[
-     *  \name Usage page 0x0C (additional media keys)
+     *  There are way more keys in the spec than we can represent in the
+     *  current scancode range, so pick the ones that commonly come up in
+     *  real world usage.
+     */
+    /* @{ */
+
+    SC_SLEEP = 258,                   /**< Sleep */
+    SC_WAKE = 259,                    /**< Wake */
+
+    SC_CHANNEL_INCREMENT = 260,       /**< Channel Increment */
+    SC_CHANNEL_DECREMENT = 261,       /**< Channel Decrement */
+
+    SC_MEDIA_PLAY = 262,          /**< Play */
+    SC_MEDIA_PAUSE = 263,         /**< Pause */
+    SC_MEDIA_RECORD = 264,        /**< Record */
+    SC_MEDIA_FAST_FORWARD = 265,  /**< Fast Forward */
+    SC_MEDIA_REWIND = 266,        /**< Rewind */
+    SC_MEDIA_NEXT_TRACK = 267,    /**< Next Track */
+    SC_MEDIA_PREVIOUS_TRACK = 268, /**< Previous Track */
+    SC_MEDIA_STOP = 269,          /**< Stop */
+    SC_MEDIA_EJECT = 270,         /**< Eject */
+    SC_MEDIA_PLAY_PAUSE = 271,    /**< Play / Pause */
+    SC_MEDIA_SELECT = 272,        /* Media Select */
+
+    SC_AC_NEW = 273,              /**< AC New */
+    SC_AC_OPEN = 274,             /**< AC Open */
+    SC_AC_CLOSE = 275,            /**< AC Close */
+    SC_AC_EXIT = 276,             /**< AC Exit */
+    SC_AC_SAVE = 277,             /**< AC Save */
+    SC_AC_PRINT = 278,            /**< AC Print */
+    SC_AC_PROPERTIES = 279,       /**< AC Properties */
+
+    SC_AC_SEARCH = 280,           /**< AC Search */
+    SC_AC_HOME = 281,             /**< AC Home */
+    SC_AC_BACK = 282,             /**< AC Back */
+    SC_AC_FORWARD = 283,          /**< AC Forward */
+    SC_AC_STOP = 284,             /**< AC Stop */
+    SC_AC_REFRESH = 285,          /**< AC Refresh */
+    SC_AC_BOOKMARKS = 286,        /**< AC Bookmarks */
+
+    /* @} *//* Usage page 0x0C */
+
+
+    /**
+     *  \name Mobile keys
      *
-     *  These values are mapped from usage page 0x0C (USB consumer page).
-     --]]
-    -- @{ --
-    SC_AUDIOREWIND = 285,
-    SC_AUDIOFASTFORWARD = 286,
-    -- @} -- -- Usage page 0x0C (additional media keys) -- 
-    -- Add any other keys here. -- 
-    SDL_NUM_SCANCODES = 512 --< not a key, just marks the number of scancodes
+     *  These are values that are often used on mobile phones.
+     */
+    /* @{ */
+
+    SC_SOFTLEFT = 287, /**< Usually situated below the display on phones and
+                                      used as a multi-function feature key for selecting
+                                      a software defined function shown on the bottom left
+                                      of the display. */
+    SC_SOFTRIGHT = 288, /**< Usually situated below the display on phones and
+                                       used as a multi-function feature key for selecting
+                                       a software defined function shown on the bottom right
+                                       of the display. */
+    SC_CALL = 289, /**< Used for accepting phone calls. */
+    SC_ENDCALL = 290, /**< Used for rejecting phone calls. */
+
+    /* @} *//* Mobile keys */
+
+    /* Add any other keys here. */
+
+    SC_RESERVED = 400,    /**< 400-500 reserved for dynamic keycodes */
+
+    SC_COUNT = 512 /**< not a key, just marks the number of scancodes for array bounds */
 }
                

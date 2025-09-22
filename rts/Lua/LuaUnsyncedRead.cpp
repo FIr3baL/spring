@@ -886,7 +886,7 @@ int LuaUnsyncedRead::GetWindowGeometry(lua_State* L)
 int LuaUnsyncedRead::GetWindowDisplayMode(lua_State* L)
 {
 	SDL_DisplayMode dmode;
-	if (!SDL_GetWindowDisplayMode(globalRendering->GetWindow(), &dmode)) {
+	if (!SDL_GetWindowFullscreenMode(globalRendering->GetWindow(), &dmode)) {
 		lua_pushnumber(L, dmode.w);
 		lua_pushnumber(L, dmode.h);
 		lua_pushnumber(L, SDL_BITSPERPIXEL(dmode.format));
@@ -3863,10 +3863,10 @@ int LuaUnsyncedRead::GetKeyState(lua_State* L)
  */
 int LuaUnsyncedRead::GetModKeyState(lua_State* L)
 {
-	lua_pushboolean(L, KeyInput::GetKeyModState(KMOD_ALT));
-	lua_pushboolean(L, KeyInput::GetKeyModState(KMOD_CTRL));
-	lua_pushboolean(L, KeyInput::GetKeyModState(KMOD_GUI));
-	lua_pushboolean(L, KeyInput::GetKeyModState(KMOD_SHIFT));
+	lua_pushboolean(L, KeyInput::GetKeyModState(SDL_KMOD_ALT));
+	lua_pushboolean(L, KeyInput::GetKeyModState(SDL_KMOD_CTRL));
+	lua_pushboolean(L, KeyInput::GetKeyModState(SDL_KMOD_GUI));
+	lua_pushboolean(L, KeyInput::GetKeyModState(SDL_KMOD_SHIFT));
 	return 4;
 }
 

@@ -944,7 +944,7 @@ namespace CrashHandler
 
 				// first try a clean exit
 				SDL_Event event;
-				event.type = SDL_QUIT;
+				event.type = SDL_EVENT_QUIT;
 				SDL_PushEvent(&event);
 
 				// force an exit if no such luck

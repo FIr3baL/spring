@@ -499,7 +499,7 @@ void CSound::OpenLoopbackDevice(const std::string& deviceName)
 	SDL_AudioSpec desiredSpec;
 	SDL_AudioSpec obtainedSpec;
 
-	desiredSpec.format = AUDIO_S16SYS;
+	desiredSpec.format = SDL_AUDIO_S16;
 	desiredSpec.freq = 44100;
 	desiredSpec.padding = 0;
 	desiredSpec.samples = 4096;
@@ -571,11 +571,11 @@ void CSound::OpenLoopbackDevice(const std::string& deviceName)
 	attrs[2] = ALC_FORMAT_TYPE_SOFT;
 
 	switch (obtainedSpec.format) {
-		case AUDIO_U8    : { attrs[3] = ALC_UNSIGNED_BYTE_SOFT ; } break;
-		case AUDIO_S8    : { attrs[3] = ALC_BYTE_SOFT          ; } break;
+		case SDL_AUDIO_U8    : { attrs[3] = ALC_UNSIGNED_BYTE_SOFT ; } break;
+		case SDL_AUDIO_S8    : { attrs[3] = ALC_BYTE_SOFT          ; } break;
 		case AUDIO_U16SYS: { attrs[3] = ALC_UNSIGNED_SHORT_SOFT; } break;
-		case AUDIO_S16SYS: { attrs[3] = ALC_SHORT_SOFT         ; } break;
-		case AUDIO_F32   : { attrs[3] = ALC_FLOAT_SOFT         ; } break;
+		case SDL_AUDIO_S16: { attrs[3] = ALC_SHORT_SOFT         ; } break;
+		case SDL_AUDIO_F32LE   : { attrs[3] = ALC_FLOAT_SOFT         ; } break;
 		default: {
 			LOG("[Sound::%s] unhandled SDL format: 0x%04x", __func__, obtainedSpec.format);
 			Cleanup();

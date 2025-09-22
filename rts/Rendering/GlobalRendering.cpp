@@ -497,7 +497,7 @@ SDL_GLContext CGlobalRendering::CreateGLContext(const int2& minCtx)
 			}
 
 			// accepts nullptr's
-			SDL_GL_DeleteContext(newContext);
+			SDL_GL_DestroyContext(newContext);
 		}
 	}
 
@@ -625,7 +625,7 @@ void CGlobalRendering::DestroyWindowAndContext() {
 
 	#if !defined(HEADLESS)
 	if (glContext)
-		SDL_GL_DeleteContext(glContext);
+		SDL_GL_DestroyContext(glContext);
 	#endif
 
 	sdlWindow = nullptr;
@@ -1151,7 +1151,7 @@ void CGlobalRendering::LogDisplayMode(SDL_Window* window) const
 {
 	// print final mode (call after SetupViewportGeometry, which updates viewSizeX/Y)
 	SDL_DisplayMode dmode;
-	SDL_GetWindowDisplayMode(window, &dmode);
+	SDL_GetWindowFullscreenMode(window, &dmode);
 
 	constexpr const std::array names = {
 		"windowed::decorated",       // fs=0,bl=0
@@ -1247,7 +1247,7 @@ void CGlobalRendering::SetWindowAttributes(SDL_Window* window)
 	if (SDL_SetWindowFullscreen(window, (borderless ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) * fullScreen) != 0)
 		LOG("[GR::%s][4][SDL_SetWindowFullscreen] err=\"%s\"", __func__, SDL_GetError());
 
-	SDL_SetWindowBordered(window, borderless ? SDL_FALSE : SDL_TRUE);
+	SDL_SetWindowBordered(window, borderless ? false : true);
 
 	if (newRes == maxRes)
 		SDL_MaximizeWindow(window);
@@ -1319,7 +1319,7 @@ bool CGlobalRendering::SetWindowInputGrabbing(bool enable)
 	// SDL_SetWindowGrab deadlocks in case it's called from non-main thread (during the MT loading).
 
 	static auto SetWindowGrabImpl = [](SDL_Window* sdlWindow, bool enable) {
-		SDL_SetWindowGrab(sdlWindow, enable ? SDL_TRUE : SDL_FALSE);
+		SDL_SetWindowGrab(sdlWindow, enable ? true : false);
 	};
 
 	if (Threading::IsMainThread())
@@ -1387,7 +1387,7 @@ int2 CGlobalRendering::GetCfgWinRes() const
 
 int CGlobalRendering::GetCurrentDisplayIndex() const
 {
-	return sdlWindow ? SDL_GetWindowDisplayIndex(sdlWindow) : 0;
+	return sdlWindow ? SDL_GetDisplayForWindow(sdlWindow) : 0;
 }
 
 void CGlobalRendering::GetDisplayBounds(SDL_Rect& r, const int* di) const
@@ -1468,7 +1468,7 @@ void CGlobalRendering::UpdateViewPortGeometry()
 		GetDisplayBounds(screen, &i);
 		LOG("[GR::%s] Raw Screen %i: pos %dx%d | size %dx%d", __func__, i, screen.x, screen.y, screen.w, screen.h);
 		// we only care about screenRects that overlap window
-		if (!SDL_IntersectRect(&screen, &winRect, &interRect)) {
+		if (!SDL_GetRectIntersection(&screen, &winRect, &interRect)) {
 			LOG("[GR::%s] No intersection: pos %dx%d | size %dx%d", __func__, screen.x, screen.y, screen.w, screen.h);
 			continue;
 		}

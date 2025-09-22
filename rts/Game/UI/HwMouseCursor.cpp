@@ -810,10 +810,10 @@ void HardwareCursorSDL::Kill()
 	RECOIL_DETAILED_TRACY_ZONE;
     for (auto &c : this->frames) {
         if (c.cursor) {
-            SDL_FreeCursor(c.cursor);
+            SDL_DestroyCursor(c.cursor);
         }
         if (c.surface) {
-            SDL_FreeSurface(c.surface);
+            SDL_DestroySurface(c.surface);
         }
     }
     this->frames.clear();

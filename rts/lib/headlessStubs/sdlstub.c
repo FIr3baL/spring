@@ -14,7 +14,7 @@ extern "C" {
 
 
 static struct SDL_Surface stubSurface;
-static struct SDL_RWops stubRWops;
+static struct SDL_IOStream stubIOStream;
 static Uint8 stubKeyState[1];
 static SDL_version stubVersion;
 static Uint32 stubSubSystemsInit = 0;
@@ -48,7 +48,7 @@ extern DECLSPEC const char* SDLCALL SDL_GetError() {
 	return "using the SDL stub library";
 }
 
-extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLattr attr, int value) {
+extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLAttr attr, int value) {
 	return 0;
 }
 
@@ -73,11 +73,11 @@ extern DECLSPEC const char *SDLCALL SDL_GetWindowTitle(SDL_Window * window) {
 extern DECLSPEC Uint32 SDLCALL SDL_GetWindowPixelFormat(SDL_Window* window) { return 0; }
 extern DECLSPEC const char* SDLCALL SDL_GetPixelFormatName(Uint32 format) { return ""; }
 
-extern DECLSPEC struct SDL_RWops* SDLCALL SDL_RWFromFile(const char* file, const char* mode) {
-	return &stubRWops;
+extern DECLSPEC struct SDL_IOStream* SDLCALL SDL_IOFromFile(const char* file, const char* mode) {
+	return &stubIOStream;
 }
 
-extern DECLSPEC SDL_Surface* SDLCALL SDL_LoadBMP_RW(SDL_RWops* src, int freesrc) {
+extern DECLSPEC SDL_Surface* SDLCALL SDL_LoadBMP_IO(SDL_IOStream* src, int freesrc) {
 	return &stubSurface;
 }
 
@@ -92,13 +92,13 @@ extern DECLSPEC SDL_Surface* SDLCALL SDL_CreateRGBSurfaceFrom(void* pixels, int 
 	return NULL;
 }
 
-extern DECLSPEC void SDLCALL SDL_FreeSurface(SDL_Surface* surface) {
+extern DECLSPEC void SDLCALL SDL_DestroySurface(SDL_Surface* surface) {
 }
 
 extern DECLSPEC void SDLCALL SDL_GL_SwapWindow(SDL_Window* window) {
 }
 
-extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(SDL_bool enabled) { return SDL_FALSE; }
+extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(bool enabled) { return false; }
 extern DECLSPEC void SDLCALL SDL_WarpMouseInWindow(SDL_Window* window, int x, int y) {
 }
 
@@ -132,7 +132,7 @@ extern DECLSPEC int SDLCALL SDL_GetWindowBordersSize(SDL_Window* window,
 	return 0;
 }
 
-extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window* window, SDL_bool bordered) {
+extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window* window, bool bordered) {
 }
 
 extern DECLSPEC int SDLCALL SDL_EnableKeyRepeat(int i, int j) {
@@ -157,7 +157,7 @@ extern DECLSPEC void SDLCALL SDL_SetWindowIcon(SDL_Window* window, SDL_Surface* 
 extern DECLSPEC void SDLCALL SDL_SetWindowMinimumSize(SDL_Window* window, int min_w, int min_h) {
 }
 
-extern DECLSPEC int SDLCALL SDL_GL_GetAttribute(SDL_GLattr attr, int* value) {
+extern DECLSPEC int SDLCALL SDL_GL_GetAttribute(SDL_GLAttr attr, int* value) {
 	*value = 0;
 	return 0;
 }
@@ -168,14 +168,14 @@ extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window* window) {
 	return &foo;
 }
 
-extern DECLSPEC void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context) {
+extern DECLSPEC void SDLCALL SDL_GL_DestroyContext(SDL_GLContext context) {
 }
 
 
-extern DECLSPEC void SDLCALL SDL_SetWindowGrab(SDL_Window* window, SDL_bool grabbed) {
+extern DECLSPEC void SDLCALL SDL_SetWindowGrab(SDL_Window* window, bool grabbed) {
 }
 
-extern DECLSPEC SDL_bool SDLCALL SDL_GetWindowGrab(SDL_Window* window) {
+extern DECLSPEC bool SDLCALL SDL_GetWindowGrab(SDL_Window* window) {
 	return 0;
 }
 
@@ -243,15 +243,15 @@ extern DECLSPEC int SDLCALL SDL_NumJoysticks() {
 	return 0;
 }
 
-extern DECLSPEC const char* SDLCALL SDL_JoystickName(SDL_Joystick* device_index) {
+extern DECLSPEC const char* SDLCALL SDL_GetJoystickName(SDL_Joystick* device_index) {
 	return "";
 }
 
-extern DECLSPEC SDL_Joystick* SDLCALL SDL_JoystickOpen(int device_index) {
+extern DECLSPEC SDL_Joystick* SDLCALL SDL_OpenJoystick(int device_index) {
 	return 0;
 }
 
-extern DECLSPEC void SDLCALL SDL_JoystickClose(SDL_Joystick* joystick) {
+extern DECLSPEC void SDLCALL SDL_CloseJoystick(SDL_Joystick* joystick) {
 }
 
 extern DECLSPEC int SDLCALL SDL_GetNumDisplayModes(int displayIndex) {
@@ -271,11 +271,11 @@ extern DECLSPEC int SDLCALL SDL_GetCurrentDisplayMode(int displayIndex, SDL_Disp
 	return SDL_GetDesktopDisplayMode(0, mode);
 }
 
-extern DECLSPEC int SDLCALL SDL_GetWindowDisplayMode(SDL_Window* window, SDL_DisplayMode* mode) {
+extern DECLSPEC int SDLCALL SDL_GetWindowFullscreenMode(SDL_Window* window, SDL_DisplayMode* mode) {
 	return SDL_GetDesktopDisplayMode(0, mode);
 }
 
-extern DECLSPEC int SDLCALL SDL_GetWindowDisplayIndex(SDL_Window* window) {
+extern DECLSPEC int SDLCALL SDL_GetDisplayForWindow(SDL_Window* window) {
 	return 0;
 }
 
@@ -284,7 +284,7 @@ extern DECLSPEC int SDLCALL SDL_GetDisplayMode(int displayIndex, int modeIndex, 
 }
 
 
-extern DECLSPEC int SDLCALL SDL_PeepEvents(SDL_Event* events, int numevents, SDL_eventaction action, Uint32 minType, Uint32 maxType) {
+extern DECLSPEC int SDLCALL SDL_PeepEvents(SDL_Event* events, int numevents, SDL_EventAction action, Uint32 minType, Uint32 maxType) {
 	return 0;
 }
 
@@ -296,12 +296,12 @@ extern DECLSPEC int SDL_GetNumVideoDisplays(void) {
 	return 0;
 }
 
-extern DECLSPEC SDL_bool SDL_HasIntersection(const SDL_Rect * A, const SDL_Rect * B) {
-	return SDL_TRUE;
+extern DECLSPEC bool SDL_HasRectIntersection(const SDL_Rect * A, const SDL_Rect * B) {
+	return true;
 }
 
-extern DECLSPEC SDL_bool SDL_IntersectRect(const SDL_Rect * A, const SDL_Rect * B, SDL_Rect * result) {
-	return SDL_TRUE;
+extern DECLSPEC bool SDL_GetRectIntersection(const SDL_Rect * A, const SDL_Rect * B, SDL_Rect * result) {
+	return true;
 }
 
 extern DECLSPEC int SDL_GetDisplayBounds(int displayIndex, SDL_Rect* rect) {
@@ -345,8 +345,8 @@ extern DECLSPEC SDL_PowerState SDL_GetPowerInfo(int *secs, int *pct) {
 	return SDL_POWERSTATE_UNKNOWN;
 }
 
-extern DECLSPEC SDL_bool SDL_SetHint(const char* name, const char* value) {
-	return SDL_TRUE;
+extern DECLSPEC bool SDL_SetHint(const char* name, const char* value) {
+	return true;
 }
 
 #if SDL_VERSION_ATLEAST(2,24,0)
@@ -363,7 +363,7 @@ extern DECLSPEC void SDLCALL SDL_StartTextInput(void) {
 extern DECLSPEC void SDLCALL SDL_StopTextInput(void) {
 }
 
-extern DECLSPEC int SDLCALL SDL_CaptureMouse(SDL_bool capture) {
+extern DECLSPEC int SDLCALL SDL_CaptureMouse(bool capture) {
 	return 0;
 }
 
@@ -376,7 +376,7 @@ extern DECLSPEC int SDLCALL SDL_SetSurfaceBlendMode(SDL_Surface* surface, SDL_Bl
 extern DECLSPEC SDL_Surface* SDLCALL SDL_CreateRGBSurfaceWithFormat(Uint32 flags, int width, int height, int depth, Uint32 format) {
 	return NULL;
 }
-extern DECLSPEC int SDLCALL SDL_UpperBlit(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect) {
+extern DECLSPEC int SDLCALL SDL_BlitSurface(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect) {
 	return 0;
 }
 
