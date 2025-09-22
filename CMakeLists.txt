@@ -159,7 +159,7 @@ else  (UNIX AND NOT MINGW)
 		if(NOT MSVC)
 			set(MINGW32_LIBRARY mingw32 CACHE STRING "mwindows for MinGW")
 		endif(NOT MSVC)
-		set(SDL2_INCLUDE_DIR "${MINGWLIBS}/include/SDL2")
+		# set(SDL2_INCLUDE_DIR "${MINGWLIBS}/include/SDL2")
 		set(CMAKE_PREFIX_PATH ${MINGWLIBS})
 		include_directories(${MINGWLIBS}/include)
 		set(CMAKE_LIBRARY_PATH ${MINGWLIBS}/dll ${MINGWLIBS}/lib)
@@ -295,7 +295,7 @@ endif (RECOIL_DETAILED_TRACY_ZONING)
 
 # Note the missing REQUIRED, as headless & dedi may not depend on those.
 #  So req. checks are done in the build target's CMakeLists.txt.
-find_package(SDL2 MODULE)
+find_package(SDL2 CONFIG)
 
 find_package_static(DevIL 1.8.0 REQUIRED)
 
