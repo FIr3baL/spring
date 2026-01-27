@@ -34,7 +34,7 @@ namespace springproc {
 	// NOLINTNEXTLINE{readability-non-const-parameter}
 	_noinline void ExecCPUID(unsigned int* a, unsigned int* b, unsigned int* c, unsigned int* d)
 	{
-		#ifndef __APPLE__
+		#ifndef SDL_PLATFORM_APPLE
 		__asm__ __volatile__(
 			"cpuid"
 			: "=a" (*a), "=b" (*b), "=c" (*c), "=d" (*d)

@@ -12,7 +12,7 @@
          Copyright (C) 2009-2010 Mathias Svensson ( http://result42.com )
 */
 
-#if (!defined(_WIN32)) && (!defined(WIN32)) && (!defined(__APPLE__))
+#if (!defined(_WIN32)) && (!defined(WIN32)) && (!defined(SDL_PLATFORM_APPLE))
         #ifndef __USE_FILE_OFFSET64
                 #define __USE_FILE_OFFSET64
         #endif
@@ -27,7 +27,7 @@
         #endif
 #endif
 
-#if defined(__APPLE__) || defined(__HAIKU__) || defined(MINIZIP_FOPEN_NO_64)
+#if defined(SDL_PLATFORM_APPLE) || defined(SDL_PLATFORM_HAIKU) || defined(MINIZIP_FOPEN_NO_64)
 // In darwin and perhaps other BSD variants off_t is a 64 bit value, hence no need for specific 64 bit functions
 #define FOPEN_FUNC(filename, mode) fopen(filename, mode)
 #define FTELLO_FUNC(stream) ftello(stream)
@@ -94,7 +94,7 @@ static void change_file_date(const char *filename, uLong dosdate, tm_unz tmu_dat
   SetFileTime(hFile,&ftm,&ftLastAcc,&ftm);
   CloseHandle(hFile);
 #else
-#if defined(unix) || defined(__APPLE__)
+#if defined(unix) || defined(SDL_PLATFORM_APPLE)
   (void)dosdate;
   struct utimbuf ut;
   struct tm newdate;
@@ -129,7 +129,7 @@ static int mymkdir(const char* dirname) {
     ret = _mkdir(dirname);
 #elif unix
     ret = mkdir (dirname,0775);
-#elif __APPLE__
+#elif SDL_PLATFORM_APPLE
     ret = mkdir (dirname,0775);
 #else
     (void)dirname;

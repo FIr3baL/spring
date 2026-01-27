@@ -1,7 +1,7 @@
 /* This file is part of the Spring engine (GPL v2 or later), see LICENSE.html */
 
-#include "SDL1_keysym.h"
-#include <SDL_keycode.h>
+#include <SDL1_keysym.h>
+#include <SDL3/SDL_keycode.h>
 
 #include "System/Log/ILog.h"
 #include "System/UnorderedMap.hpp"

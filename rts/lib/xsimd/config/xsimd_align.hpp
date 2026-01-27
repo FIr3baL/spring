@@ -17,7 +17,7 @@
  * Platform checks for aligned malloc functions *
  ************************************************/
 
-#if ((defined __QNXNTO__) || (defined _GNU_SOURCE) || ((defined _XOPEN_SOURCE) && (_XOPEN_SOURCE >= 600))) \
+#if ((defined SDL_PLATFORM_QNXNTO) || (defined _GNU_SOURCE) || ((defined _XOPEN_SOURCE) && (_XOPEN_SOURCE >= 600))) \
  && (defined _POSIX_ADVISORY_INFO) && (_POSIX_ADVISORY_INFO > 0)
   #define XSIMD_HAS_POSIX_MEMALIGN 1
 #else

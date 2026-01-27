@@ -2,7 +2,7 @@
 
 #include "List.h"
 
-#include <SDL_mouse.h>
+#include <SDL3/SDL_mouse.h>
 
 #include "Rendering/Fonts/glFont.h"
 #include "Rendering/GlobalRendering.h"

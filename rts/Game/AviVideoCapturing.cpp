@@ -11,8 +11,8 @@
 #include "System/StringUtil.h"
 #include "System/FileSystem/FileHandler.h"
 #include "lib/streflop/streflop_cond.h"
-#include <SDL_mouse.h>
-#include <SDL_events.h>
+#include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_events.h>
 
 #include <string>
 

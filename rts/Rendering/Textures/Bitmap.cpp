@@ -7,7 +7,7 @@
 #include <memory>
 
 #include <IL/il.h>
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 
 #include "Rendering/GL/myGL.h"
 #ifndef HEADLESS

@@ -32,7 +32,7 @@
 #include <RmlUi/Core/Context.h>
 #include <RmlUi/Core/Input.h>
 #include <RmlUi/Core/SystemInterface.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <System/Log/ILog.h>
 #include <System/Misc/SpringTime.h>
 

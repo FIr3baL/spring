@@ -54,11 +54,11 @@
 #  endif
 # endif
 
-# if !defined(_WIN32) && !defined(__WIN32__) && !defined(WIN32)
+# if !defined(_WIN32) && !defined(SDL_PLATFORM_WIN32) && !defined(WIN32)
 #  if !defined(ASIO_DISABLE_VISIBILITY)
 #   pragma GCC visibility push (default)
 #  endif // !defined(ASIO_DISABLE_VISIBILITY)
-# endif // !defined(_WIN32) && !defined(__WIN32__) && !defined(WIN32)
+# endif // !defined(_WIN32) && !defined(SDL_PLATFORM_WIN32) && !defined(WIN32)
 
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wnon-virtual-dtor"

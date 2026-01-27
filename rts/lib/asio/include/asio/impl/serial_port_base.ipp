@@ -251,7 +251,7 @@ ASIO_SYNC_OP_VOID serial_port_base::flow_control::store(
     storage.c_iflag &= ~(IXOFF | IXON);
 # if defined(_BSD_SOURCE) || defined(_DEFAULT_SOURCE)
     storage.c_cflag &= ~CRTSCTS;
-# elif defined(__QNXNTO__)
+# elif defined(SDL_PLATFORM_QNXNTO)
     storage.c_cflag &= ~(IHFLOW | OHFLOW);
 # endif
     break;
@@ -259,7 +259,7 @@ ASIO_SYNC_OP_VOID serial_port_base::flow_control::store(
     storage.c_iflag |= IXOFF | IXON;
 # if defined(_BSD_SOURCE) || defined(_DEFAULT_SOURCE)
     storage.c_cflag &= ~CRTSCTS;
-# elif defined(__QNXNTO__)
+# elif defined(SDL_PLATFORM_QNXNTO)
     storage.c_cflag &= ~(IHFLOW | OHFLOW);
 # endif
     break;
@@ -268,7 +268,7 @@ ASIO_SYNC_OP_VOID serial_port_base::flow_control::store(
     storage.c_iflag &= ~(IXOFF | IXON);
     storage.c_cflag |= CRTSCTS;
     break;
-# elif defined(__QNXNTO__)
+# elif defined(SDL_PLATFORM_QNXNTO)
     storage.c_iflag &= ~(IXOFF | IXON);
     storage.c_cflag |= (IHFLOW | OHFLOW);
     break;
@@ -310,7 +310,7 @@ ASIO_SYNC_OP_VOID serial_port_base::flow_control::load(
   {
     value_ = hardware;
   }
-# elif defined(__QNXNTO__)
+# elif defined(SDL_PLATFORM_QNXNTO)
   else if (storage.c_cflag & IHFLOW && storage.c_cflag & OHFLOW)
   {
     value_ = hardware;

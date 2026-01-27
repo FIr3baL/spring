@@ -104,9 +104,9 @@
 
 #include <fstream>
 
-#include <SDL_keyboard.h>
-#include <SDL_clipboard.h>
-#include <SDL_mouse.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_clipboard.h>
+#include <SDL3/SDL_mouse.h>
 
 // MinGW defines this for a WINAPI function
 #undef SendMessage

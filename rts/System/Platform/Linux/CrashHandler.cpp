@@ -15,7 +15,7 @@
 
 #include <csignal>
 #include <execinfo.h>
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 #include <sys/resource.h> // getrlimits
 #define UNW_LOCAL_ONLY
 #include <libunwind.h>
@@ -38,7 +38,7 @@
 #endif
 
 
-#if !defined(__APPLE__)
+#if !defined(SDL_PLATFORM_APPLE)
 #define ADDR2LINE "addr2line"
 #else
 // NB: Mac/CrashHandler.cpp #include's this compilation unit
@@ -283,7 +283,7 @@ static int CommonStringLength(const std::string& str1, const std::string& str2)
 
 
 
-#if !defined(__APPLE__)
+#if !defined(SDL_PLATFORM_APPLE)
 
 /**
  * Finds the base memory address in the running process for all the libraries
@@ -658,7 +658,7 @@ static void LogStacktrace(const int logLevel, StackTrace& stacktrace)
 	}
 }
 
-#endif  // !(__APPLE__)
+#endif  // !(SDL_PLATFORM_APPLE)
 
 
 
@@ -709,7 +709,7 @@ namespace CrashHandler
 
 		unw_cursor_t cursor;
 
-#if (defined(__arm__) || defined(__APPLE__))
+#if (defined(__arm__) || defined(SDL_PLATFORM_APPLE))
 		// ucontext_t and unw_context_t are not aliases here
 		unw_context_t thisctx;
 		unw_getcontext(&thisctx);
@@ -742,7 +742,7 @@ namespace CrashHandler
 		}
 		*/
 
-#if (defined(__arm__) || defined(__APPLE__))
+#if (defined(__arm__) || defined(SDL_PLATFORM_APPLE))
 		const int err = unw_init_local(&cursor, &thisctx);
 #else
 		const int err = unw_init_local(&cursor, uc);

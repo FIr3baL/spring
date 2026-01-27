@@ -40,8 +40,8 @@
 #include "System/Sound/ISound.h"
 #include "System/Sound/ISoundChannels.h"
 
-#include <SDL_mouse.h>
-#include <SDL_keycode.h>
+#include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_keycode.h>
 
 #include "System/Misc/TracyDefs.h"
 

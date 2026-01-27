@@ -4,7 +4,7 @@
 #include <cfloat>
 #include <functional>
 
-#include <SDL_keycode.h>
+#include <SDL3/SDL_keycode.h>
 
 #include "PreGame.h"
 

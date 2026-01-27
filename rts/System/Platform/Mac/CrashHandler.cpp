@@ -2,7 +2,7 @@
 
 #include "System/Platform/CrashHandler.h"
 
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
 // ### Unix(compliant) CrashHandler START
 
 #include <AvailabilityMacros.h>

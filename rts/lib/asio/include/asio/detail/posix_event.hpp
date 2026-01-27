@@ -129,14 +129,14 @@ public:
     {
       state_ += 2;
       timespec ts;
-#if (defined(__MACH__) && defined(__APPLE__)) \
+#if (defined(__MACH__) && defined(SDL_PLATFORM_APPLE)) \
       || (defined(__ANDROID__) && (__ANDROID_API__ < 21) \
           && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
       ts.tv_sec = usec / 1000000;
       ts.tv_nsec = (usec % 1000000) * 1000;
       ::pthread_cond_timedwait_relative_np(
           &cond_, &lock.mutex().mutex_, &ts); // Ignore EINVAL.
-#else // (defined(__MACH__) && defined(__APPLE__))
+#else // (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
       // || (defined(__ANDROID__) && (__ANDROID_API__ < 21)
       //     && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
       if (::clock_gettime(CLOCK_MONOTONIC, &ts) == 0)
@@ -148,7 +148,7 @@ public:
         ::pthread_cond_timedwait(&cond_,
             &lock.mutex().mutex_, &ts); // Ignore EINVAL.
       }
-#endif // (defined(__MACH__) && defined(__APPLE__))
+#endif // (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
        // || (defined(__ANDROID__) && (__ANDROID_API__ < 21)
        //     && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
       state_ -= 2;

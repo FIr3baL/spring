@@ -7,7 +7,7 @@
  * Feel free to customize this file to suit your needs.
  */
 
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
 
 #import <Cocoa/Cocoa.h>
 

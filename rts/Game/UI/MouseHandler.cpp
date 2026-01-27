@@ -46,9 +46,9 @@
 #include <algorithm>
 
 // can't be up there since those contain conflicting definitions
-#include <SDL_mouse.h>
-#include <SDL_events.h>
-#include <SDL_keycode.h>
+#include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_keycode.h>
 
 using namespace GL::State;
 
@@ -89,7 +89,7 @@ CMouseHandler::CMouseHandler()
 
 	UpdateCursorCameraDir();
 
-#ifndef __APPLE__
+#ifndef SDL_PLATFORM_APPLE
 	hardwareCursor = configHandler->GetBool("HardwareCursor");
 #endif
 

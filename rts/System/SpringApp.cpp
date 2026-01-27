@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <System/GflagsExt.h>
 
 #ifdef _WIN32
@@ -314,7 +314,7 @@ bool SpringApp::Init()
 
 bool SpringApp::InitPlatformLibs()
 {
-#if !(defined(_WIN32) || defined(__APPLE__) || defined(HEADLESS)) || defined(__OpenBSD__)
+#if !(defined(_WIN32) || defined(SDL_PLATFORM_APPLE) || defined(HEADLESS)) || defined(__OpenBSD__)
 	// MUST run before any other X11 call (including
 	// those by SDL) to make calls to X11 threadsafe
 	if (!XInitThreads()) {

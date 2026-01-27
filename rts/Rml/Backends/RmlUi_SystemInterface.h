@@ -35,7 +35,7 @@
 #include <RmlUi/Core/Input.h>
 #include <RmlUi/Core/SystemInterface.h>
 #include <RmlUi/Core/Types.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include "Rml/SolLua/TranslationTable.h"
 

@@ -1,9 +1,9 @@
 #include "glxHandler.h"
 
-#if !defined(HEADLESS) && !defined(_WIN32) && !defined(__APPLE__)
+#if !defined(HEADLESS) && !defined(_WIN32) && !defined(SDL_PLATFORM_APPLE)
 
 #include <glad/glad_glx.h>
-#include <SDL_syswm.h>
+#include <SDL3/SDL_syswm.h>
 
 void GLX::Load(SDL_Window* window)
 {

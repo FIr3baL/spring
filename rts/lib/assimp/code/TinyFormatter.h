@@ -97,7 +97,7 @@ public:
     // can also cause trouble here. Apparently, older gcc versions sometimes copy temporaries
     // being bound to const ref& function parameters. Copying streams is not permitted, though.
     // This workaround avoids this by manually specifying a copy ctor.
-#if !defined(__GNUC__) || !defined(__APPLE__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+#if !defined(__GNUC__) || !defined(SDL_PLATFORM_APPLE) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
     explicit basic_formatter(const basic_formatter& other) {
         underlying << (string)other;
     }

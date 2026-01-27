@@ -55,7 +55,7 @@ static inline std::string GetUnitsyncLibName()
 {
 #if   defined(_WIN32)
 	return "unitsync.dll";
-#elif defined(__APPLE__)
+#elif defined(SDL_PLATFORM_APPLE)
 	return "libunitsync.dylib";
 #else
 	return "libunitsync.so";
@@ -357,7 +357,7 @@ void DataDirLocater::AddShareDirs()
 	if (IsInstallDirDataDir())
 		AddDirs(GetBinaryLocation());
 
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
 	// Mac OS X Application Bundle (*.app) - single file install
 
 	// directory structure (Apple standard):

@@ -22,7 +22,7 @@
 		#define SHGFP_TYPE_CURRENT 0
 	#endif
 
-#elif defined(__APPLE__)
+#elif defined(SDL_PLATFORM_APPLE)
 	#include <cstdlib>
 	#include <climits> // for PATH_MAX
 
@@ -202,7 +202,7 @@ namespace Platform
 		}
 
 
-		#elif defined(__APPLE__)
+		#elif defined(SDL_PLATFORM_APPLE)
 		uint32_t pathlen = PATH_MAX;
 		char path[PATH_MAX];
 
@@ -228,7 +228,7 @@ namespace Platform
 		if (procExeFilePath[0] == 0)
 			LOG_L(L_WARNING, "[%s] could not get process executable file path, reason: %s", __func__, error);
 
-		#if defined(__APPLE__)
+		#if defined(SDL_PLATFORM_APPLE)
 		return GetRealPath(procExeFilePath);
 		#else
 		return procExeFilePath;
@@ -248,8 +248,8 @@ namespace Platform
 		// this will only be used if moduleFilePath stays empty
 		const char* error = nullptr;
 
-	#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
-		#ifdef __APPLE__
+	#if defined(__linux__) || defined(SDL_PLATFORM_APPLE) || defined(__FreeBSD__) || defined(__OpenBSD__)
+		#ifdef SDL_PLATFORM_APPLE
 		#define SHARED_LIBRARY_EXTENSION "dylib"
 		#else
 		#define SHARED_LIBRARY_EXTENSION "so"
@@ -384,7 +384,7 @@ namespace Platform
 		return "FreeBSD";
 		#elif defined(__OpenBSD__)
 		return "OpenBSD";
-		#elif defined(__APPLE__)
+		#elif defined(SDL_PLATFORM_APPLE)
 		return "MacOS";
 		#else
 		return "Unknown";
@@ -748,7 +748,7 @@ namespace Platform
 		return (GetMacType(macAddr, 0), macAddr);
 	}
 
-	#elif defined(__APPLE__)
+	#elif defined(SDL_PLATFORM_APPLE)
 
 	std::array<uint8_t, 6> GetRawMacAddr() {
 		// TODO: http://lists.freebsd.org/pipermail/freebsd-hackers/2004-June/007415.html

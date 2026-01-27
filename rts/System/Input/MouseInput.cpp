@@ -27,9 +27,9 @@
 #include "System/MainDefines.h"
 #include "System/SafeUtil.h"
 
-#include <SDL_events.h>
-#include <SDL_hints.h>
-#include <SDL_syswm.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_hints.h>
+#include <SDL3/SDL_syswm.h>
 
 
 IMouseInput* mouseInput = nullptr;

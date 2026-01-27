@@ -32,7 +32,7 @@
 #include <RmlUi/Core.h>
 #include <RmlUi/Core/Profiling.h>
 #include <RmlUi/Debugger.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <functional>
 #include <ranges>
 #include <tracy/Tracy.hpp>

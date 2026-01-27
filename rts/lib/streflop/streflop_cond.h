@@ -44,7 +44,7 @@ namespace streflop {
 
 
 
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
 // macosx's cmath doesn't include c++11's std::hypot yet (tested 2013)
 namespace std {
 	template<typename T> T hypot(T x, T y);
@@ -128,7 +128,7 @@ namespace math {
 
 
 
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
 #include <algorithm>
 
 namespace std {

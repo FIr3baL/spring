@@ -14,11 +14,11 @@
 #else // _WIN32
 	#include "Linux/SoLib.h"
 	#define SL_IMPL_CLS SoLib
-	#if defined __APPLE__
+	#if defined SDL_PLATFORM_APPLE
 		#define SL_IMPL_EXT "dylib"
-	#else // defined __APPLE__
+	#else // defined SDL_PLATFORM_APPLE
 		#define SL_IMPL_EXT "so"
-	#endif // defined __APPLE__
+	#endif // defined SDL_PLATFORM_APPLE
 #endif // _WIN32
 
 /**

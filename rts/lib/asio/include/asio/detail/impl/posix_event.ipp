@@ -31,10 +31,10 @@ namespace detail {
 posix_event::posix_event()
   : state_(0)
 {
-#if (defined(__MACH__) && defined(__APPLE__)) \
+#if (defined(__MACH__) && defined(SDL_PLATFORM_APPLE)) \
       || (defined(__ANDROID__) && (__ANDROID_API__ < 21))
   int error = ::pthread_cond_init(&cond_, 0);
-#else // (defined(__MACH__) && defined(__APPLE__))
+#else // (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
       // || (defined(__ANDROID__) && (__ANDROID_API__ < 21))
   ::pthread_condattr_t attr;
   int error = ::pthread_condattr_init(&attr);
@@ -45,7 +45,7 @@ posix_event::posix_event()
       error = ::pthread_cond_init(&cond_, &attr);
     ::pthread_condattr_destroy(&attr);
   }
-#endif // (defined(__MACH__) && defined(__APPLE__))
+#endif // (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
        // || (defined(__ANDROID__) && (__ANDROID_API__ < 21))
 
   asio::error_code ec(error,

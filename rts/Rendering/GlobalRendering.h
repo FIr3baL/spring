@@ -3,6 +3,7 @@
 #ifndef _GLOBAL_RENDERING_H
 #define _GLOBAL_RENDERING_H
 
+#include <SDL3/SDL_video.h>
 #include <string>
 #include <memory>
 #include <array>
@@ -17,7 +18,7 @@ class SharedLib;
 struct SDL_version;
 struct SDL_Rect;
 struct SDL_Window;
-typedef void* SDL_GLContext;
+// typedef void* SDL_GLContext;
 
 /**
  * @brief Globally accessible unsynced, rendering related data

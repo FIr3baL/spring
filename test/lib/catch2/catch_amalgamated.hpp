@@ -86,7 +86,7 @@
 
 // See e.g.:
 // https://opensource.apple.com/source/CarbonHeaders/CarbonHeaders-18.1/TargetConditionals.h.auto.html
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
 #  ifndef __has_extension
 #    define __has_extension(x) 0
 #  endif
@@ -101,7 +101,7 @@
 #elif defined(linux) || defined(__linux) || defined(__linux__)
 #  define CATCH_PLATFORM_LINUX
 
-#elif defined(WIN32) || defined(__WIN32__) || defined(_WIN32) || defined(_MSC_VER) || defined(__MINGW32__)
+#elif defined(WIN32) || defined(SDL_PLATFORM_WIN32) || defined(_WIN32) || defined(_MSC_VER) || defined(__MINGW32__)
 #  define CATCH_PLATFORM_WINDOWS
 
 #  if defined( WINAPI_FAMILY ) && ( WINAPI_FAMILY == WINAPI_FAMILY_APP )
@@ -501,7 +501,7 @@
 #    define CATCH_INTERNAL_SUPPRESS_SHADOW_WARNINGS
 #endif
 
-#if defined(__APPLE__) && defined(__apple_build_version__) && (__clang_major__ < 10)
+#if defined(SDL_PLATFORM_APPLE) && defined(__apple_build_version__) && (__clang_major__ < 10)
 #   undef CATCH_INTERNAL_SUPPRESS_UNUSED_TEMPLATE_WARNINGS
 #elif defined(__clang__) && (__clang_major__ < 5)
 #   undef CATCH_INTERNAL_SUPPRESS_UNUSED_TEMPLATE_WARNINGS

@@ -117,7 +117,7 @@
 #else
 	#define SOL_PLATFORM_WINDOWS_I_ SOL_OFF
 #endif
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
 	#define SOL_PLATFORM_APPLE_I_ SOL_ON
 #else
 	#define SOL_PLATFORM_APPLE_I_ SOL_OFF
@@ -3201,7 +3201,7 @@ COMPAT53_API void luaL_requiref(lua_State *L, const char *modname,
 #endif /* VC++ _fsopen for share-allowed file read */
 
 #ifndef COMPAT53_HAVE_STRERROR_R
-#if defined(__GLIBC__) || defined(_POSIX_VERSION) || defined(__APPLE__) || (!defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ < 6))
+#if defined(__GLIBC__) || defined(_POSIX_VERSION) || defined(SDL_PLATFORM_APPLE) || (!defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ < 6))
 #define COMPAT53_HAVE_STRERROR_R 1
 #else /* none of the defines matched: define to 0 */
 #define COMPAT53_HAVE_STRERROR_R 0
@@ -3757,7 +3757,7 @@ COMPAT53_API int luaL_loadbufferx(lua_State* L, const char* buff, size_t sz, con
 }
 
 #if !defined(l_inspectstat) \
-     && (defined(unix) || defined(__unix) || defined(__unix__) || defined(__TOS_AIX__) || defined(_SYSTYPE_BSD) || (defined(__APPLE__) && defined(__MACH__)))
+     && (defined(unix) || defined(__unix) || defined(__unix__) || defined(__TOS_AIX__) || defined(_SYSTYPE_BSD) || (defined(SDL_PLATFORM_APPLE) && defined(__MACH__)))
 /* some form of unix; check feature macros in unistd.h for details */
 #include <unistd.h>
 /* check posix version; the relevant include files and macros probably

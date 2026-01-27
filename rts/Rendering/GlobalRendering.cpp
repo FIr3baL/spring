@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include "GlobalRendering.h"
 #include "GlobalRenderingInfo.h"
@@ -37,8 +37,9 @@
 #include "System/creg/creg_cond.h"
 #include "Game/Game.h"
 
-#include <SDL_syswm.h>
-#include <SDL_rect.h>
+#include <SDL3/SDL_syswm.h>
+#include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_video.h>
 
 #include "System/Misc/TracyDefs.h"
 
@@ -423,10 +424,10 @@ SDL_Window* CGlobalRendering::CreateSDLWindow(const char* title) const
 	//   SDL_WINDOW_FULLSCREEN, for "real" fullscreen with a videomode change;
 	//   SDL_WINDOW_FULLSCREEN_DESKTOP for "fake" fullscreen that takes the size of the desktop;
 	//   and 0 for windowed mode.
-
-	uint32_t sdlFlags  = (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-	         sdlFlags |= (borderless_ ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) * fullScreen_;
-	         sdlFlags |= (SDL_WINDOW_BORDERLESS * borderless_);
+	
+	uint32_t sdlFlags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+            sdlFlags |= SDL_WINDOW_FULLSCREEN * fullScreen_;
+            sdlFlags |= SDL_WINDOW_BORDERLESS * borderless_;
 
 	for (size_t i = 0; i < (aaLvls.size()) && (newWindow == nullptr); i++) {
 		if (i > 0 && aaLvls[i] == aaLvls[i - 1])
@@ -438,7 +439,7 @@ SDL_Window* CGlobalRendering::CreateSDLWindow(const char* title) const
 		for (size_t j = 0; j < (zbBits.size()) && (newWindow == nullptr); j++) {
 			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, zbBits[j]);
 
-			if ((newWindow = SDL_CreateWindow(title, winPosX_, winPosY_, newRes.x, newRes.y, sdlFlags)) == nullptr) {
+			if ((newWindow = SDL_CreateWindow(title, newRes.x, newRes.y, sdlFlags)) == nullptr) {
 				LOG_L(L_WARNING, frmts[0], __func__, SDL_GetError(), aaLvls[i], zbBits[j]);
 				continue;
 			}
@@ -451,6 +452,22 @@ SDL_Window* CGlobalRendering::CreateSDLWindow(const char* title) const
 		auto buf = fmt::sprintf("[GR::%s] could not create SDL-window\n", __func__);
 		handleerror(nullptr, buf.c_str(), "ERROR", MBF_OK | MBF_EXCL);
 		return nullptr;
+	}
+
+	SDL_SetWindowPosition(newWindow, winPosX_, winPosY_);
+	if (fullScreen_) {
+		if (borderless_) {
+			// desktop-fullscreen
+			SDL_SetWindowFullscreen(newWindow, true);
+		} else {
+			// exclusive fullscreen
+			SDL_DisplayID disp = SDL_GetDisplayForWindow(newWindow);
+			SDL_DisplayMode mode{};
+			if (SDL_GetClosestFullscreenDisplayMode(disp, newRes.x, newRes.y, 0.0f, false, &mode)) {
+				SDL_SetWindowFullscreenMode(newWindow, &mode);
+			}
+			SDL_SetWindowFullscreen(newWindow, true);
+		}
 	}
 
 	UpdateWindowBorders(newWindow);
@@ -971,8 +988,8 @@ void CGlobalRendering::QueryVersionInfo(char (&sdlVersionStr)[64], char (&glVidM
 	auto& sdlVC = grInfo.sdlVersionCompiled;
 	auto& sdlVL = grInfo.sdlVersionLinked;
 
-	SDL_VERSION(&sdlVC);
-	SDL_GetVersion(&sdlVL);
+	// SDL_VERSION(&sdlVC);
+	// SDL_GetVersion(&sdlVL);
 
 #ifndef HEADLESS
 	grInfo.gladVersion = "0.1.36";
@@ -997,8 +1014,12 @@ void CGlobalRendering::QueryVersionInfo(char (&sdlVersionStr)[64], char (&glVidM
 	constexpr const char* memFmtStr = "%iMB (total) / %iMB (available)";
 
 	SNPRINTF(sdlVersionStr, sizeof(sdlVersionStr), sdlFmtStr,
-		sdlVL.major, sdlVL.minor, sdlVL.patch,
-		sdlVC.major, sdlVC.minor, sdlVC.patch
+		SDL_VERSIONNUM_MAJOR(sdlVL),
+		SDL_VERSIONNUM_MINOR(sdlVL),
+		SDL_VERSIONNUM_MICRO(sdlVL),
+		SDL_VERSIONNUM_MAJOR(sdlVC),
+		SDL_VERSIONNUM_MINOR(sdlVC),
+		SDL_VERSIONNUM_MICRO(sdlVC)
 	);
 
 	if (!GetAvailableVideoRAM(&grInfo.gpuMemorySize.x, grInfo.glVendor))
@@ -1020,7 +1041,12 @@ void CGlobalRendering::LogVersionInfo(const char* sdlVersionStr, const char* glV
 	LOG("\tGLSL version: %s", globalRenderingInfo.glslVersion);
 	LOG("\tGLAD version: %s", globalRenderingInfo.gladVersion);
 	LOG("\tGPU memory  : %s", glVidMemStr);
-	LOG("\tSDL swap-int: %d", SDL_GL_GetSwapInterval());
+	int interval = 0;
+	if (SDL_GL_GetSwapInterval(&interval)) {
+    	LOG("\tSDL swap-int: %d", interval);
+	} else {
+    	LOG("\tSDL swap-int: (could not query: %s)", SDL_GetError());
+	}
 	LOG("\tSDL driver  : %s", globalRenderingInfo.sdlDriverName);
 	LOG("\t");
 	LOG("\tInitialized OpenGL Context: %i.%i (%s)", globalRenderingInfo.glContextVersion.x, globalRenderingInfo.glContextVersion.y, globalRenderingInfo.glContextIsCore ? "Core" : "Compat");
@@ -1150,8 +1176,14 @@ void CGlobalRendering::LogVersionInfo(const char* sdlVersionStr, const char* glV
 void CGlobalRendering::LogDisplayMode(SDL_Window* window) const
 {
 	// print final mode (call after SetupViewportGeometry, which updates viewSizeX/Y)
-	SDL_DisplayMode dmode;
-	SDL_GetWindowFullscreenMode(window, &dmode);
+	// SDL_DisplayMode dmode;
+	// SDL_GetWindowFullscreenMode(window, &dmode);
+
+	const SDL_DisplayMode* dmode = SDL_GetWindowFullscreenMode(window);
+	if (!dmode) {
+		LOG_L(L_WARNING, "SDL_GetWindowFullscreenMode() failed: %s", SDL_GetError());
+		return;
+	}
 
 	constexpr const std::array names = {
 		"windowed::decorated",       // fs=0,bl=0
@@ -1163,7 +1195,7 @@ void CGlobalRendering::LogDisplayMode(SDL_Window* window) const
 	const int fs = fullScreen;
 	const int bl = borderless;
 
-	LOG("[GR::%s] display-mode set to %ix%ix%ibpp@%iHz (%s)", __func__, viewSizeX, viewSizeY, SDL_BITSPERPIXEL(dmode.format), dmode.refresh_rate, names[fs * 2 + bl]);
+	LOG("[GR::%s] display-mode set to %ix%ix%ibpp@%.2fHz (%s)", __func__, viewSizeX, viewSizeY, SDL_BITSPERPIXEL(dmode->format), dmode->refresh_rate, names[fs * 2 + bl]);
 }
 
 void CGlobalRendering::GetAllDisplayBounds(SDL_Rect& r) const
@@ -1223,7 +1255,8 @@ void CGlobalRendering::SetWindowAttributes(SDL_Window* window)
 	winPosY = configHandler->GetInt("WindowPosY");
 
 	// update display count
-	numDisplays = SDL_GetNumVideoDisplays();
+	SDL_DisplayID *displays = SDL_GetDisplays(&numDisplays);
+	SDL_free(displays);
 
 	// get desired resolution
 	// note that the configured fullscreen resolution is just
@@ -1244,10 +1277,33 @@ void CGlobalRendering::SetWindowAttributes(SDL_Window* window)
 	SDL_SetWindowPosition(window, winPosX, winPosY);
 	SDL_SetWindowSize(window, newRes.x, newRes.y);
 
-	if (SDL_SetWindowFullscreen(window, (borderless ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) * fullScreen) != 0)
-		LOG("[GR::%s][4][SDL_SetWindowFullscreen] err=\"%s\"", __func__, SDL_GetError());
+	bool ok = 0;
+	if (fullScreen) {
+		if (borderless) {
+			// desktop-fullscreen
+			ok = SDL_SetWindowFullscreen(window, true);
+		} else {
+			// exclusive fullscreen
+			SDL_DisplayID disp = SDL_GetDisplayForWindow(window);
+			SDL_DisplayMode mode{};
+			if (SDL_GetClosestFullscreenDisplayMode(disp, newRes.x, newRes.y, 0.0f, false, &mode)) {
+				SDL_SetWindowFullscreenMode(window, &mode);
+			}
+			ok = SDL_SetWindowFullscreen(window, true);
+		}
+	} else {
+		ok = SDL_SetWindowFullscreen(window, false);
+		if (ok) {
+			bool okBorder = SDL_SetWindowBordered(window, !borderless);
+			if (!okBorder) {
+				LOG("[GR::%s][4][SDL_SetWindowBordered] err=\"%s\"", __func__, SDL_GetError());
+			}
+		}
+	}
 
-	SDL_SetWindowBordered(window, borderless ? false : true);
+	if (!ok) {
+    	LOG("[GR::%s][4][SDL_SetWindowFullscreen] err=\"%s\"", __func__, SDL_GetError());
+	}
 
 	if (newRes == maxRes)
 		SDL_MaximizeWindow(window);
@@ -1311,24 +1367,32 @@ void CGlobalRendering::UpdateTimer()
 
 bool CGlobalRendering::GetWindowInputGrabbing()
 {
-	return static_cast<bool>(SDL_GetWindowGrab(sdlWindow));
+	return SDL_GetWindowMouseGrab(sdlWindow);
+	
+	// Maybe this could help to gain focus without moving the mouse after Alt+Tab
+	// return SDL_GetWindowMouseGrab(sdlWindow) || SDL_GetWindowKeyboardGrab(sdlWindow);
 }
 
 bool CGlobalRendering::SetWindowInputGrabbing(bool enable)
 {
-	// SDL_SetWindowGrab deadlocks in case it's called from non-main thread (during the MT loading).
+    // SDL_SetWindowMouseGrab may block on some backends if called from a non-main thread (during the MT loading),
+    // so we ensure the call is always executed on the main thread.
 
-	static auto SetWindowGrabImpl = [](SDL_Window* sdlWindow, bool enable) {
-		SDL_SetWindowGrab(sdlWindow, enable ? true : false);
-	};
+    static auto SetWindowGrabImpl = [](SDL_Window* sdlWindow, bool enable) {
+        if (!SDL_SetWindowMouseGrab(sdlWindow, enable)) {
+            LOG_L(L_WARNING, "SDL_SetWindowMouseGrab(%d) failed: %s", enable, SDL_GetError());
+        }
+    };
 
-	if (Threading::IsMainThread())
-		SetWindowGrabImpl(sdlWindow, enable);
-	else
-		spring::QueuedFunction::Enqueue(SetWindowGrabImpl, sdlWindow, enable);
+    if (Threading::IsMainThread())
+        SetWindowGrabImpl(sdlWindow, enable);
+    else
+        spring::QueuedFunction::Enqueue(SetWindowGrabImpl, sdlWindow, enable);
 
-	return enable;
+    return enable;
 }
+
+
 
 bool CGlobalRendering::ToggleWindowInputGrabbing()
 {
@@ -1365,10 +1429,21 @@ bool CGlobalRendering::SetWindowPosHelper(int displayIdx, int winRPosX, int winR
 }
 
 int2 CGlobalRendering::GetMaxWinRes() const {
-	SDL_DisplayMode dmode;
-	SDL_GetDesktopDisplayMode(GetCurrentDisplayIndex(), &dmode);
-	return {dmode.w, dmode.h};
+    // Get the display ID for the current window
+    SDL_DisplayID displayID = SDL_GetDisplayForWindow(sdlWindow);
+
+    // Query the desktop display mode for this display
+    const SDL_DisplayMode* dmode = SDL_GetDesktopDisplayMode(displayID);
+
+    if (!dmode) {
+        LOG_L(L_WARNING, "SDL_GetDesktopDisplayMode() failed: %s", SDL_GetError());
+        return {0, 0};
+    }
+
+    return {dmode->w, dmode->h};
 }
+
+
 
 int2 CGlobalRendering::GetCfgWinRes() const
 {

@@ -10,7 +10,7 @@
 #include "System/StringUtil.h"
 #include "System/Input/KeyInput.h"
 
-#include <SDL_keycode.h>
+#include <SDL3/SDL_keycode.h>
 
 #include "System/Misc/TracyDefs.h"
 

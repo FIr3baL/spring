@@ -8,7 +8,7 @@
 #include "System/Config/ConfigHandler.h"
 #include "System/Log/ILog.h"
 
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 
 static constexpr int MAX_ADAPTIVE_INTERVAL = -6;
 static constexpr int MAX_STANDARD_INTERVAL = +6;

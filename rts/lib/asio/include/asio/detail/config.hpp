@@ -387,7 +387,7 @@
 #    if defined(ASIO_HAS_CLANG_LIBCXX)
 #     if (_LIBCPP_STD_VER > 14) && defined(_LIBCPP_HAS_ALIGNED_ALLOC) \
         && !defined(_LIBCPP_MSVCRT) && !defined(__MINGW32__)
-#      if defined(__APPLE__)
+#      if defined(SDL_PLATFORM_APPLE)
 #       if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
 #        if (__MAC_OS_X_VERSION_MIN_REQUIRED >= 101500)
 #         define ASIO_HAS_STD_ALIGNED_ALLOC 1
@@ -405,9 +405,9 @@
 #         define ASIO_HAS_STD_ALIGNED_ALLOC 1
 #        endif // (__WATCH_OS_VERSION_MIN_REQUIRED >= 60000)
 #       endif // defined(__WATCH_OS_X_VERSION_MIN_REQUIRED)
-#      else // defined(__APPLE__)
+#      else // defined(SDL_PLATFORM_APPLE)
 #       define ASIO_HAS_STD_ALIGNED_ALLOC 1
-#      endif // defined(__APPLE__)
+#      endif // defined(SDL_PLATFORM_APPLE)
 #     endif // (_LIBCPP_STD_VER > 14) && defined(_LIBCPP_HAS_ALIGNED_ALLOC)
             //   && !defined(_LIBCPP_MSVCRT) && !defined(__MINGW32__)
 #    elif defined(_GLIBCXX_HAVE_ALIGNED_ALLOC)
@@ -719,7 +719,7 @@
 # if !defined(ASIO_WINDOWS_RUNTIME)
 #  if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
 #   define ASIO_WINDOWS 1
-#  elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+#  elif defined(WIN32) || defined(_WIN32) || defined(SDL_PLATFORM_WIN32)
 #   define ASIO_WINDOWS 1
 #  elif defined(ASIO_WINDOWS_APP)
 #   define ASIO_WINDOWS 1
@@ -753,13 +753,13 @@
 #  endif // defined(_WIN32) && !defined(WIN32)
 # endif // defined(_MSC_VER)
 # if defined(__BORLANDC__)
-#  if defined(__WIN32__) && !defined(WIN32)
+#  if defined(SDL_PLATFORM_WIN32) && !defined(WIN32)
 #   if !defined(_WINSOCK2API_)
 #    define WIN32 // Needed for correct types in winsock2.h
 #   else // !defined(_WINSOCK2API_)
 #    error Please define the macro WIN32 in your compiler options
 #   endif // !defined(_WINSOCK2API_)
-#  endif // defined(__WIN32__) && !defined(WIN32)
+#  endif // defined(SDL_PLATFORM_WIN32) && !defined(WIN32)
 # endif // defined(__BORLANDC__)
 # if defined(__CYGWIN__)
 #  if !defined(__USE_W32_SOCKETS)
@@ -808,12 +808,12 @@
    || defined(__unix) \
    || defined(_XOPEN_SOURCE) \
    || defined(_POSIX_SOURCE) \
-   || (defined(__MACH__) && defined(__APPLE__)) \
+   || (defined(__MACH__) && defined(SDL_PLATFORM_APPLE)) \
    || defined(__FreeBSD__) \
    || defined(__NetBSD__) \
    || defined(__OpenBSD__) \
    || defined(__linux__) \
-   || defined(__HAIKU__)
+   || defined(SDL_PLATFORM_HAIKU)
 #   define ASIO_HAS_UNISTD_H 1
 #  endif
 # endif // !defined(ASIO_HAS_BOOST_CONFIG)
@@ -861,7 +861,7 @@
 #endif // !defined(ASIO_HAS_IO_URING_AS_DEFAULT)
 
 // Mac OS X, FreeBSD, NetBSD, OpenBSD: kqueue.
-#if (defined(__MACH__) && defined(__APPLE__)) \
+#if (defined(__MACH__) && defined(SDL_PLATFORM_APPLE)) \
   || defined(__FreeBSD__) \
   || defined(__NetBSD__) \
   || defined(__OpenBSD__)
@@ -870,7 +870,7 @@
 #   define ASIO_HAS_KQUEUE 1
 #  endif // !defined(ASIO_DISABLE_KQUEUE)
 # endif // !defined(ASIO_HAS_KQUEUE)
-#endif // (defined(__MACH__) && defined(__APPLE__))
+#endif // (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
        //   || defined(__FreeBSD__)
        //   || defined(__NetBSD__)
        //   || defined(__OpenBSD__)
@@ -1020,7 +1020,7 @@
 #   elif defined(UNDER_CE)
 #    define ASIO_HAS_GETADDRINFO 1
 #   endif // defined(UNDER_CE)
-#  elif defined(__MACH__) && defined(__APPLE__)
+#  elif defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
 #   if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
 #    if (__MAC_OS_X_VERSION_MIN_REQUIRED >= 1050)
 #     define ASIO_HAS_GETADDRINFO 1
@@ -1028,9 +1028,9 @@
 #   else // defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
 #    define ASIO_HAS_GETADDRINFO 1
 #   endif // defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
-#  else // defined(__MACH__) && defined(__APPLE__)
+#  else // defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
 #   define ASIO_HAS_GETADDRINFO 1
-#  endif // defined(__MACH__) && defined(__APPLE__)
+#  endif // defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
 # endif // !defined(ASIO_DISABLE_GETADDRINFO)
 #endif // !defined(ASIO_HAS_GETADDRINFO)
 
@@ -1067,9 +1067,9 @@
 #   define ASIO_HAS_THREADS 1
 #  elif defined(_REENTRANT)
 #   define ASIO_HAS_THREADS 1
-#  elif defined(__APPLE__)
+#  elif defined(SDL_PLATFORM_APPLE)
 #   define ASIO_HAS_THREADS 1
-#  elif defined(__HAIKU__)
+#  elif defined(SDL_PLATFORM_HAIKU)
 #   define ASIO_HAS_THREADS 1
 #  elif defined(_POSIX_THREADS) && (_POSIX_THREADS + 0 >= 0)
 #   define ASIO_HAS_THREADS 1
@@ -1086,7 +1086,7 @@
 #   define ASIO_HAS_PTHREADS 1
 #  elif defined(_POSIX_THREADS) && (_POSIX_THREADS + 0 >= 0)
 #   define ASIO_HAS_PTHREADS 1
-#  elif defined(__HAIKU__)
+#  elif defined(SDL_PLATFORM_HAIKU)
 #   define ASIO_HAS_PTHREADS 1
 #  endif // defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
 # endif // defined(ASIO_HAS_THREADS)
@@ -1212,14 +1212,14 @@
 #   define ASIO_THREAD_KEYWORD __declspec(thread)
 #  endif // (_MSC_VER >= 1700)
 # endif // defined(ASIO_MSVC) && defined(ASIO_WINDOWS_RUNTIME)
-# if defined(__APPLE__)
+# if defined(SDL_PLATFORM_APPLE)
 #  if defined(__clang__)
 #   if defined(__apple_build_version__)
 #    define ASIO_HAS_THREAD_KEYWORD_EXTENSION 1
 #    define ASIO_THREAD_KEYWORD __thread
 #   endif // defined(__apple_build_version__)
 #  endif // defined(__clang__)
-# endif // defined(__APPLE__)
+# endif // defined(SDL_PLATFORM_APPLE)
 # if !defined(ASIO_HAS_THREAD_KEYWORD_EXTENSION)
 #  if defined(ASIO_HAS_BOOST_CONFIG)
 #   if !defined(BOOST_NO_CXX11_THREAD_LOCAL)
@@ -1236,10 +1236,10 @@
 // Support for POSIX ssize_t typedef.
 #if !defined(ASIO_DISABLE_SSIZE_T)
 # if defined(__linux__) \
-   || (defined(__MACH__) && defined(__APPLE__))
+   || (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
 #  define ASIO_HAS_SSIZE_T 1
 # endif // defined(__linux__)
-        //   || (defined(__MACH__) && defined(__APPLE__))
+        //   || (defined(__MACH__) && defined(SDL_PLATFORM_APPLE))
 #endif // !defined(ASIO_DISABLE_SSIZE_T)
 
 // Helper macros to manage transition away from error_code return values.

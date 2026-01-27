@@ -83,10 +83,10 @@
 #include <cctype>
 #include <algorithm>
 
-#include <SDL_keyboard.h>
-#include <SDL_clipboard.h>
-#include <SDL_keycode.h>
-#include <SDL_mouse.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_clipboard.h>
+#include <SDL3/SDL_keycode.h>
+#include <SDL3/SDL_mouse.h>
 
 
 /******************************************************************************

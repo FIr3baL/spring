@@ -57,7 +57,7 @@
 # include "asio/detail/old_win_sdk_compat.hpp"
 #else
 # include <sys/ioctl.h>
-# if (defined(__MACH__) && defined(__APPLE__)) \
+# if (defined(__MACH__) && defined(SDL_PLATFORM_APPLE)) \
    || defined(__FreeBSD__) || defined(__NetBSD__) \
    || defined(__OpenBSD__) || defined(__linux__) \
    || defined(__EMSCRIPTEN__)
@@ -390,17 +390,17 @@ typedef int signed_size_type;
 # endif
 // Note: QNX Neutrino 6.3 defines AI_V4MAPPED, AI_ALL and AI_ADDRCONFIG but
 // does not implement them. Therefore they are specifically excluded here.
-# if defined(AI_V4MAPPED) && !defined(__QNXNTO__)
+# if defined(AI_V4MAPPED) && !defined(SDL_PLATFORM_QNXNTO)
 #  define ASIO_OS_DEF_AI_V4MAPPED AI_V4MAPPED
 # else
 #  define ASIO_OS_DEF_AI_V4MAPPED 0
 # endif
-# if defined(AI_ALL) && !defined(__QNXNTO__)
+# if defined(AI_ALL) && !defined(SDL_PLATFORM_QNXNTO)
 #  define ASIO_OS_DEF_AI_ALL AI_ALL
 # else
 #  define ASIO_OS_DEF_AI_ALL 0
 # endif
-# if defined(AI_ADDRCONFIG) && !defined(__QNXNTO__)
+# if defined(AI_ADDRCONFIG) && !defined(SDL_PLATFORM_QNXNTO)
 #  define ASIO_OS_DEF_AI_ADDRCONFIG AI_ADDRCONFIG
 # else
 #  define ASIO_OS_DEF_AI_ADDRCONFIG 0

@@ -7,7 +7,7 @@
 #include <alext.h>
 
 #ifdef ALC_SOFT_loopback
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #endif
 
 #ifndef ALC_ALL_DEVICES_SPECIFIER

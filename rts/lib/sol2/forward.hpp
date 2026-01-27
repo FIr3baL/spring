@@ -117,7 +117,7 @@
 #else
 	#define SOL_PLATFORM_WINDOWS_I_ SOL_OFF
 #endif
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
 	#define SOL_PLATFORM_APPLE_I_ SOL_ON
 #else
 	#define SOL_PLATFORM_APPLE_I_ SOL_OFF

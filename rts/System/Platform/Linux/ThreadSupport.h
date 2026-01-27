@@ -3,7 +3,7 @@
 #ifndef THREADSIGNALHANDLER_H
 #define THREADSIGNALHANDLER_H
 
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
 	// FIXME: exclusively for ucontext.h
 	#define _XOPEN_SOURCE 700
 #endif

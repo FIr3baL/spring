@@ -487,7 +487,7 @@ static void util_initFileSelector(const char* suffix) {
 	fileSelectorSuffix = suffix;
 }
 
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
 static int util_fileSelector(struct dirent* fileDesc) {
 #else
 static int util_fileSelector(const struct dirent* fileDesc) {

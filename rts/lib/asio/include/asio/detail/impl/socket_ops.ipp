@@ -34,12 +34,12 @@
 #endif // defined(ASIO_WINDOWS_RUNTIME)
 
 #if defined(ASIO_WINDOWS) || defined(__CYGWIN__) \
-  || defined(__MACH__) && defined(__APPLE__)
+  || defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
 # if defined(ASIO_HAS_PTHREADS)
 #  include <pthread.h>
 # endif // defined(ASIO_HAS_PTHREADS)
 #endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-       // || defined(__MACH__) && defined(__APPLE__)
+       // || defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
 
 #include "asio/detail/push_options.hpp"
 
@@ -119,7 +119,7 @@ socket_type accept(socket_type s, void* addr,
   if (new_s == invalid_socket)
     return new_s;
 
-#if defined(__MACH__) && defined(__APPLE__) || defined(__FreeBSD__)
+#if defined(__MACH__) && defined(SDL_PLATFORM_APPLE) || defined(__FreeBSD__)
   int optval = 1;
   int result = ::setsockopt(new_s, SOL_SOCKET,
       SO_NOSIGPIPE, &optval, sizeof(optval));
@@ -1883,7 +1883,7 @@ socket_type socket(int af, int type, int protocol,
   }
 
   return s;
-#elif defined(__MACH__) && defined(__APPLE__) || defined(__FreeBSD__)
+#elif defined(__MACH__) && defined(SDL_PLATFORM_APPLE) || defined(__FreeBSD__)
   socket_type s = ::socket(af, type, protocol);
   get_last_error(ec, s == invalid_socket);
   if (s == invalid_socket)
@@ -1975,7 +1975,7 @@ int setsockopt(socket_type s, state_type& state, int level, int optname,
   get_last_error(ec, result != 0);
   if (result == 0)
   {
-#if defined(__MACH__) && defined(__APPLE__) \
+#if defined(__MACH__) && defined(SDL_PLATFORM_APPLE) \
   || defined(__NetBSD__) || defined(__FreeBSD__) \
   || defined(__OpenBSD__) || defined(__QNX__)
     // To implement portable behaviour for SO_REUSEADDR with UDP sockets we
@@ -2188,7 +2188,7 @@ int ioctl(socket_type s, state_type& state, int cmd,
 
 #if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
   int result = ::ioctlsocket(s, cmd, arg);
-#elif defined(__MACH__) && defined(__APPLE__) \
+#elif defined(__MACH__) && defined(SDL_PLATFORM_APPLE) \
   || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
   int result = ::ioctl(s, static_cast<unsigned int>(cmd), arg);
 #else
@@ -2929,7 +2929,7 @@ inline hostent* gethostbyaddr(const char* addr, int length, int af,
   if (error)
     ec = translate_netdb_error(error);
   return retval;
-#elif defined(__MACH__) && defined(__APPLE__)
+#elif defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
   (void)(buffer);
   (void)(buflength);
   int error = 0;
@@ -2985,7 +2985,7 @@ inline hostent* gethostbyname(const char* name, int af, struct hostent* result,
   if (error)
     ec = translate_netdb_error(error);
   return retval;
-#elif defined(__MACH__) && defined(__APPLE__)
+#elif defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
   (void)(buffer);
   (void)(buflength);
   int error = 0;
@@ -3017,7 +3017,7 @@ inline hostent* gethostbyname(const char* name, int af, struct hostent* result,
 
 inline void freehostent(hostent* h)
 {
-#if defined(__MACH__) && defined(__APPLE__)
+#if defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
   if (h)
     ::freehostent(h);
 #else
@@ -3805,7 +3805,7 @@ asio::error_code getaddrinfo(const char* host,
   return ec = translate_addrinfo_error(error);
 #else
   int error = ::getaddrinfo(host, service, &hints, result);
-#if defined(__MACH__) && defined(__APPLE__)
+#if defined(__MACH__) && defined(SDL_PLATFORM_APPLE)
   using namespace std; // For isdigit and atoi.
   if (error == 0 && service && isdigit(static_cast<unsigned char>(service[0])))
   {

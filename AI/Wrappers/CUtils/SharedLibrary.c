@@ -24,7 +24,7 @@ const char* sharedLib_getLibExtension() {
 
 #ifdef _WIN32
 	return "dll";
-#elif defined __APPLE__
+#elif defined SDL_PLATFORM_APPLE
 	return "dylib";
 #else
 	return "so";

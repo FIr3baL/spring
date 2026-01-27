@@ -408,7 +408,7 @@ namespace xsimd
 
     inline void sincos(float val, float&s, float& c)
     {
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
         __sincosf(val, &s, &c);
 #elif defined(_GNU_SOURCE)
         ::sincosf(val, &s, &c);
@@ -420,7 +420,7 @@ namespace xsimd
 
     inline void sincos(double val, double&s, double& c)
     {
-#if defined(__APPLE__)
+#if defined(SDL_PLATFORM_APPLE)
         __sincos(val, &s, &c);
 #elif defined(_GNU_SOURCE)
         ::sincos(val, &s, &c);

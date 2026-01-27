@@ -3,7 +3,7 @@
 #ifndef _GLOBAL_RENDERING_INFO_H
 #define _GLOBAL_RENDERING_INFO_H
 
-#include <SDL_version.h>
+#include <SDL3/SDL_version.h>
 #include "System/type2.h"
 
 #include <vector>
@@ -39,8 +39,10 @@ struct GlobalRenderingInfo {
 	int2 glContextVersion;
 	int2 gpuMemorySize;
 
-	SDL_version sdlVersionCompiled;
-	SDL_version sdlVersionLinked;
+	// SDL_version sdlVersionCompiled;
+	// SDL_version sdlVersionLinked;
+	const int sdlVersionCompiled = SDL_VERSION;  /* hardcoded number from SDL headers */
+	const int sdlVersionLinked = SDL_GetVersion();  /* reported by linked SDL library */
 
 	std::vector<AvailableVideoMode> availableVideoModes;
 };

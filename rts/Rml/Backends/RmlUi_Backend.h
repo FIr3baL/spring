@@ -33,7 +33,7 @@
 
 #include "Rml/Rml_MathTypes_Conversions.h"
 #include <RmlUi/Core.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include "Game/UI/InputReceiver.h"
 #include "lib/sol2/sol.hpp"
